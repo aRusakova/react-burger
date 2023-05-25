@@ -1,0 +1,26 @@
+.wrapper {
+  background: #131316;
+  overflow: hidden;
+  @media screen and (min-width: 1200px) {
+    max-height: 100vh;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  @media screen and (min-width: 1200px) {
+    flex-direction: row;
+    margin: 0 auto;
+    max-width: 1280px;
+  }
+}
+
+ul {
+    margin:0;
+	padding:0;
+}
+
+li {
+    list-style: none;
+}

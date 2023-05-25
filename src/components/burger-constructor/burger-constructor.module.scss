@@ -1,0 +1,49 @@
+.wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.constructorList,
+.fillingsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.fillingsList {
+  overflow: auto;
+}
+
+.constructorList {
+  height: auto;
+  max-height: 57vh;
+}
+
+.fillingsItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.constructorItem {
+  margin-left: 32px;
+}
+
+.totalBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (min-width: 1200px) {
+    justify-content: flex-end;
+  }
+}
+
+.total {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}

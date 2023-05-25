@@ -1,0 +1,16 @@
+.wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.priceBlock {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.name {
+    text-align: center;
+}

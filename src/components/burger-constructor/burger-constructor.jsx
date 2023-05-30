@@ -8,23 +8,33 @@ import {
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useMemo, useState } from "react";
+import Modal from "../modal/modal";
+import OrderDetails from "./order-details/order-details";
 
 BurgerConstructor.propTypes = {
   data: PropTypes.arrayOf(ingridietPropTypes).isRequired,
 };
 
-function BurgerConstructor(props) {
-  const buns = props.data.filter((item) => item.type === "bun");
-  const fillings = props.data.filter(
+function BurgerConstructor({data}) {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const buns = useMemo(() => data.filter((item) => item.type === "bun"), [data]);
+
+  const fillings = useMemo(() => data.filter(
     (item) => item.type === "sauce" || item.type === "main"
-  );
-  const totalCounter = fillings.reduce(
+  ), [data]);
+  
+  const totalCounter = useMemo(() => fillings.reduce(
     (acc, elem) => acc + elem.price,
     buns[0].price * 2
-  );
+  ), [fillings, buns]);
 
   return (
-    <section className={classNames(styles.wrapper, "pt-25")}>
+    
+  <>
+  <section className={classNames(styles.wrapper, "pt-25")}>
       <ul className={classNames(styles.constructorList, "mb-10")}>
         <li className={styles.constructorItem}>
           <ConstructorElement
@@ -71,11 +81,15 @@ function BurgerConstructor(props) {
           </p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="large">
+        <Button htmlType="button" type="primary" size="large" onClick={() => setIsModalOpen(true)}>
           Оформить заказ
         </Button>
       </div>
     </section>
+    <Modal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)}>
+      <OrderDetails />
+    </Modal>
+  </>
   );
 }
 

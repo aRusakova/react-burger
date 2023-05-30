@@ -7,11 +7,14 @@ import classNames from "classnames";
 BurgerIngredientsList.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(ingridietPropTypes).isRequired,
+  type: PropTypes.string.isRequired,
+  clickOnIngridient: PropTypes.func.isRequired,
 };
 
-function BurgerIngredientsList(props) {
+function BurgerIngredientsList({data, title, type, clickOnIngridient}) {
+
   return (
-    <section className={styles.ingridientsBlock}>
+    <section className={styles.ingridientsBlock} id={type}>
       <p
         className={classNames(
           styles.title,
@@ -19,16 +22,17 @@ function BurgerIngredientsList(props) {
           "mb-6"
         )}
       >
-        {props.title}
+        {title}
       </p>
       <ul className={classNames(styles.ingridientsList, "ml-4 mb-10 mr-4")}>
-        {props.data.map((item) => (
+        {data.map((item) => (
           <li key={item._id}>
-            <BurgerIngredient data={item} />
+            <BurgerIngredient data={item} clickOnIngridient={clickOnIngridient}/>
           </li>
         ))}
       </ul>
     </section>
+
   );
 }
 

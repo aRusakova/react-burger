@@ -5,11 +5,10 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Error from "../error/error";
 import Loader from "../loader/loader";
-import Modal from "../modal/modal";
-import IngredientDetails from "../burger-ingredients/ingridient-details/ingridient-details";
+import { getIngredients } from "../../utils/burger-api";
+
 
 function App() {
-  const url = "https://norma.nomoreparties.space/api/ingredients";
 
   const [state, setState] = useState({
     data: [],
@@ -21,11 +20,10 @@ function App() {
     const getData = async () => {
       setState({ ...state, isLoading: true });
       try {
-        const response = await fetch(url);
-        const result = await response.json();
+        const result = await getIngredients();
         setState({
           ...state,
-          data: result.data,
+          data: result,
           isLoading: false,
           isError: false,
         });

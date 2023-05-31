@@ -7,11 +7,10 @@ import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 Modal.propTypes = {
   children: PropTypes.element.isRequired,
-  isOpen: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
 };
 
-export default function Modal({ children, isOpen, closeModal }) {
+export default function Modal({ children, closeModal }) {
 
   const modalOverlayRef = useRef();
 
@@ -33,8 +32,6 @@ export default function Modal({ children, isOpen, closeModal }) {
       closeModal();
     }
   };
-
-  if (!isOpen) return null;
 
   return createPortal(
     <section className={styles.wrapper} onClick={clickOnLayout}>

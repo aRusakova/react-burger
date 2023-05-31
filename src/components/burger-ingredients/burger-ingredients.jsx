@@ -45,7 +45,6 @@ function BurgerIngredients({ data }) {
     setIngrInModal(null);
     setIsModalOpen(false);
   };
-  
 
   return (
     <>
@@ -105,9 +104,11 @@ function BurgerIngredients({ data }) {
           />
         </div>
       </section>
-      <Modal isOpen={isModalOpen} closeModal={closeModal}>
-        <IngredientDetails {...ingrInModal}/>
-      </Modal>
+      {isModalOpen && (
+        <Modal closeModal={closeModal}>
+          <IngredientDetails {...ingrInModal} />
+        </Modal>
+      )}
     </>
   );
 }

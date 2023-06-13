@@ -8,10 +8,11 @@ BurgerIngredientsList.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(ingridietPropTypes).isRequired,
   type: PropTypes.string.isRequired,
-  clickOnIngridient: PropTypes.func.isRequired,
+  // clickOnIngridient: PropTypes.func.isRequired,
 };
 
-function BurgerIngredientsList({data, title, type, clickOnIngridient}) {
+// function BurgerIngredientsList({data, title, type, clickOnIngridient}) {
+function BurgerIngredientsList({data, title, type }) {
 
   return (
     <section className={styles.ingridientsBlock} id={type}>
@@ -27,7 +28,8 @@ function BurgerIngredientsList({data, title, type, clickOnIngridient}) {
       <ul className={classNames(styles.ingridientsList, "ml-4 mb-10 mr-4")}>
         {data.map((item) => (
           <li key={item._id}>
-            <BurgerIngredient data={item} clickOnIngridient={clickOnIngridient}/>
+            {/* <BurgerIngredient data={item} clickOnIngridient={clickOnIngridient}/> */}
+            <BurgerIngredient data={item} />
           </li>
         ))}
       </ul>

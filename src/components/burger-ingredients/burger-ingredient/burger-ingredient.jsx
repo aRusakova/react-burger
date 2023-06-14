@@ -1,5 +1,4 @@
 import styles from "./burger-ingredient.module.scss";
-import PropTypes from "prop-types";
 import { ingridietPropTypes } from "../../../utils/data";
 import classNames from "classnames";
 import {
@@ -8,31 +7,28 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { addIngredient } from "../../../services/burger-ingredient/reducer";
 import { useDispatch, useSelector } from "react-redux";
-import { addConstructIngredient } from "../../../services/burger-constructor/reducer";
 import { useMemo } from "react";
 import { useDrag } from "react-dnd";
 
 BurgerIngredient.propTypes = {
   data: ingridietPropTypes,
-  // clickOnIngridient: PropTypes.func.isRequired,
 };
 
-// function BurgerIngredient({data, clickOnIngridient}) {
 function BurgerIngredient({ data }) {
+  
   const dispatch = useDispatch();
 
   const clickOnIngridient = (ingredient) => {
     dispatch(addIngredient(ingredient));
-    // dispatch(addConstructIngredient(data));
   };
 
   const { ingredients, bun } = useSelector((store) => store.construct.consruct);
 
   const bunCounter = useMemo(() => {
     if (bun) {
-      return bun._id === data._id ? 2 : 0;
+      return bun._id === data._id ? 2 : '';
     }
-  }, [bun]);
+  }, [bun, data._id]);
 
   const ingredientCounter = useMemo(() => {
     let counter = {};
@@ -45,11 +41,11 @@ function BurgerIngredient({ data }) {
       return counter;
     });
     return counter[data._id];
-  }, [ingredients]);
+  }, [ingredients, data._id]);
 
   const [, dragRef] = useDrag({
     type: "ingredient",
-    item: { id: data._id },
+    item: { id: data._id, type: data.type },
   });
 
   return (

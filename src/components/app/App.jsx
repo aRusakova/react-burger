@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "./App.scss";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
@@ -32,7 +32,6 @@ function App() {
             <BurgerConstructor />
           </main>
         )}
-
         {!loading && error && <Error />}
       </div>
     </DndProvider>

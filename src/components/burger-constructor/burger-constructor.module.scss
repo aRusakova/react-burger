@@ -9,6 +9,13 @@
   flex-direction: column;
   gap: 16px;
   align-items: stretch;
+}
+
+.fillingsList {
+  border-radius: 10px;
+}
+
+.hover {
   border: 1px solid #fff;
 }
 
@@ -25,10 +32,10 @@
   display: flex;
   align-items: center;
   gap: 5px;
-}
 
-.hover {
-  background-color: red;
+  &_empty {
+    justify-content: end;
+  }
 }
 
 .constructorItem {

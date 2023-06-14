@@ -1,23 +1,17 @@
-import { useMemo, useRef, useState, useEffect } from "react";
-// import { ingridietPropTypes } from "../../utils/data";
-// import PropTypes from "prop-types";
+import { useMemo, useRef, useState } from "react";
 import styles from "./burger-ingredients.module.scss";
 import classNames from "classnames";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsList from "./burger-ingredients-list/burger-ingredients-list";
 import Modal from "../modal/modal";
 import IngredientDetails from "./ingridient-details/ingridient-details";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { deleteIngredient } from "../../services/burger-ingredient/reducer";
 
-// BurgerIngredients.propTypes = {
-//   data: PropTypes.arrayOf(ingridietPropTypes).isRequired,
-// };
-
-// function BurgerIngredients({ data }) {
 function BurgerIngredients() {
-
   const dispatch = useDispatch();
+
+  const [category, setCategory] = useState("buns");
 
   const { ingredients } = useSelector((store) => store.ingredients);
   const { ingredient } = useSelector((store) => store.ingredient);
@@ -27,45 +21,21 @@ function BurgerIngredients() {
   const saucesRef = useRef();
   const mainsRef = useRef();
 
-  // console.log(tabsRef?.current?.getBoundingClientRect());
-  // console.log(tabsRef.getBoundingClientRect())
-
   const currentTab = () => {
-    const tubs = tabsRef?.current?.getBoundingClientRect().bottom;
+    const tubsPosition = tabsRef?.current?.getBoundingClientRect().bottom;
+    const bunsPosition  = bunsRef?.current?.getBoundingClientRect().top;
+    const saucesPosition  = saucesRef?.current?.getBoundingClientRect().top;
+    const mainsPosition  = mainsRef?.current?.getBoundingClientRect().top;
 
-    const buns = bunsRef?.current?.getBoundingClientRect().top;
-    const sauces = saucesRef?.current?.getBoundingClientRect().top;
-    const mains = mainsRef?.current?.getBoundingClientRect().top;
+    const bunsToTubs = Math.abs(tubsPosition - bunsPosition);
+    const saucesToTabs = Math.abs(tubsPosition - saucesPosition);
+    const mainsToTubs = Math.abs(tubsPosition - mainsPosition);
 
-    console.log(tubs, buns, sauces, mains)
+    const minimum = Math.min(bunsToTubs, saucesToTabs, mainsToTubs);
 
-    const a = Math.abs(tubs - buns);
-    const b = Math.abs(tubs - sauces);
-    const c = Math.abs(tubs - mains);
+    return minimum === bunsToTubs ? setCategory("buns") : minimum === saucesToTabs ? setCategory("sauces") : minimum === mainsToTubs ? setCategory("mains") : '';
 
-    const res = Math.min(a, b, c);
-
-    if (res === a ) {
-      setCategory("buns")
-    }
-    if (res === b ) {
-      setCategory("sauces")
-    }
-    if (res === c ) {
-      setCategory("mains")
-    }
-  }
-
-  // useEffect(() => {
-  //   document.addEventListener("scroll", currentTab);
-  //   return () => {
-  //     document.removeEventListener("scroll", currentTab);
-  //   };
-  // }, [currentTab]);
-
-  const [category, setCategory] = useState("buns");
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [ingrInModal, setIngrInModal] = useState(null);
+  };
 
   const buns = useMemo(
     () => ingredients.filter((item) => item.type === "bun"),
@@ -85,16 +55,6 @@ function BurgerIngredients() {
     const element = document.getElementById(id);
     if (element) element.scrollIntoView({ behavior: "smooth" });
   };
-
-  // const clickOnIngridient = (ingridient) => {
-  //   setIngrInModal(ingridient);
-  //   setIsModalOpen(true);
-  // };
-
-  // const closeModal = () => {
-  //   setIngrInModal(null);
-  //   setIsModalOpen(false);
-  // };
 
   const closeModal = () => {
     dispatch(deleteIngredient());
@@ -137,37 +97,35 @@ function BurgerIngredients() {
             </Tab>
           </div>
         </nav>
-        <div className={classNames(styles.block, "custom-scroll")} onScroll={currentTab}>
+        <div
+          className={classNames(styles.block, "custom-scroll")}
+          onScroll={currentTab}
+        >
           <div ref={bunsRef}>
             <BurgerIngredientsList
-            title="Булки"
-            data={buns}
-            type="buns"
-            // clickOnIngridient={clickOnIngridient}
-          />
+              title="Булки"
+              data={buns}
+              type="buns"
+            />
           </div>
           <div ref={saucesRef}>
             <BurgerIngredientsList
-            title="Соусы"
-            data={sauces}
-            type="sauces"
-            // clickOnIngridient={clickOnIngridient}
-          />
+              title="Соусы"
+              data={sauces}
+              type="sauces"
+            />
           </div>
           <div ref={mainsRef}>
             <BurgerIngredientsList
-            title="Начинки"
-            data={mains}
-            type="mains"
-            // clickOnIngridient={clickOnIngridient}
-          />
+              title="Начинки"
+              data={mains}
+              type="mains"
+            />
           </div>
-          
         </div>
       </section>
       {ingredient && (
         <Modal closeModal={closeModal}>
-          {/* <IngredientDetails {...ingrInModal} /> */}
           <IngredientDetails />
         </Modal>
       )}

@@ -1,14 +1,10 @@
 import styles from "./burger-constructor.module.scss";
-import PropTypes from "prop-types";
-import { ingridietPropTypes } from "../../utils/data";
 import classNames from "classnames";
 import {
-  ConstructorElement,
-  DragIcon,
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,43 +17,15 @@ import { addOrder } from "../../services/burger-order/actions";
 import Loader from "../loader/loader";
 import Error from "../error/error";
 import { useDrop } from "react-dnd";
+import BurgerConstructorItem from "./burger-constructor-item/burger-constructor-item";
 
-// BurgerConstructor.propTypes = {
-//   data: PropTypes.arrayOf(ingridietPropTypes).isRequired,
-// };
-
-// function BurgerConstructor({ data }) {
 function BurgerConstructor() {
   const dispatch = useDispatch();
+
   const allIngredients = useSelector((store) => store.ingredients.ingredients);
-
-  const onDropHandler = (id) => {
-    console.log(id);
-    const draggedElement = allIngredients.find((item) => item._id === id);
-    console.log(draggedElement);
-    dispatch(addConstructIngredient(draggedElement));
-  };
-
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-
   const { bun } = useSelector((store) => store.construct.consruct);
   const { ingredients } = useSelector((store) => store.construct.consruct);
   const { error, loading, order } = useSelector((store) => store.order);
-
-  // const buns = useMemo(
-  //   () => data.filter((item) => item.type === "bun"),
-  //   [data]
-  // );
-
-  // const fillings = useMemo(
-  //   () => data.filter((item) => item.type === "sauce" || item.type === "main"),
-  //   [data]
-  // );
-
-  // const totalCounter = useMemo(
-  //   () => fillings.reduce((acc, elem) => acc + elem.price, buns[0].price * 2),
-  //   [fillings, buns]
-  // );
 
   const totalCounter = useMemo(() => {
     let total;
@@ -84,65 +52,77 @@ function BurgerConstructor() {
     dispatch(deleteAllConstructIngredients());
   };
 
-  const [, dropTarget] = useDrop({
+  const [{ isHoverBun, isHoverIngr }, dropTarget] = useDrop({
     accept: "ingredient",
-    drop: (itemId) => {
-      console.log(itemId);
-      onDropHandler(itemId);
+    drop: (item) => {
+      onDropHandler(item);
     },
+    collect: (monitor) => ({
+      isHoverBun: monitor.isOver() && monitor.getItem().type === "bun",
+      isHoverIngr:
+        monitor.isOver() &&
+        (monitor.getItem().type === "main" ||
+          monitor.getItem().type === "sauce"),
+    }),
   });
+
+  const onDropHandler = (item) => {
+    const draggedElement = allIngredients.find((elem) => elem._id === item.id);
+    dispatch(addConstructIngredient(draggedElement));
+  };
 
   return (
     <>
       <section className={classNames(styles.wrapper, "pt-25")}>
-        <ul className={classNames(styles.constructorList, "mb-10")}>
+        <ul
+          className={classNames(styles.constructorList, "mb-10")}
+          ref={dropTarget}
+        >
           <li className={styles.constructorItem}>
-            {bun ? (
-              <ConstructorElement
-                type="top"
-                isLocked={true}
-                text={`${bun.name} (верх)`}
-                price={bun.price}
-                thumbnail={bun.image}
-              />
-            ) : (
-              <p>добавьте булку</p>
-            )}
+            <BurgerConstructorItem
+              type="bun"
+              top={true}
+              isHoverBun={isHoverBun}
+            />
           </li>
           <ul
-            className={classNames(styles.fillingsList, "custom-scroll")}
-            ref={dropTarget}
+            className={classNames(
+              styles.fillingsList,
+              "custom-scroll",
+              isHoverIngr && ingredients.length && styles.hover
+            )}
           >
             {ingredients.length ? (
-              ingredients.map((elem) => (
+              ingredients.map((elem, index) => (
                 <li className={styles.fillingsItem} key={elem.key}>
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    type="bottom"
-                    isLocked={false}
-                    text={elem.name}
-                    price={elem.price}
-                    thumbnail={elem.image}
-                    handleClose={() => deleteIngredient(elem.key)}
+                  <BurgerConstructorItem
+                    type="ingredient"
+                    data={elem}
+                    index={index}
+                    deleteIngredient={deleteIngredient}
                   />
                 </li>
               ))
             ) : (
-              <p>Добавьте ингридиенты</p>
+              <li
+                className={classNames(
+                  styles.fillingsItem,
+                  styles.fillingsItem_empty
+                )}
+              >
+                <BurgerConstructorItem
+                  type="ingredient"
+                  isHoverIngr={isHoverIngr}
+                />
+              </li>
             )}
           </ul>
           <li className={styles.constructorItem}>
-            {bun ? (
-              <ConstructorElement
-                type="bottom"
-                isLocked={true}
-                text={`${bun.name} (низ)`}
-                price={bun.price}
-                thumbnail={bun.image}
-              />
-            ) : (
-              <p>добавьте булку</p>
-            )}
+            <BurgerConstructorItem
+              type="bun"
+              top={false}
+              isHoverBun={isHoverBun}
+            />
           </li>
         </ul>
         <div className={styles.totalBlock}>

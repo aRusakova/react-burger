@@ -11,10 +11,6 @@ export const constructSlice = createSlice({
   },
   reducers: {
     addConstructIngredient: {
-      //   reducer: (state, action) => {
-      //     console.log(action);
-      //     state.ingredient = action.payload;
-      //   },
       reducer: (state, action) => {
         if (action.payload.type === "bun") {
           state.consruct.bun = action.payload;
@@ -27,9 +23,6 @@ export const constructSlice = createSlice({
       },
     },
     deleteConstructIngredient: {
-      //   reducer: (state) => {
-      //     state.ingredient = null;
-      //   },
       reducer: (state, action) => {
         state.consruct.ingredients = state.consruct.ingredients.filter(
           (ingredient) => ingredient.key !== action.payload
@@ -37,17 +30,26 @@ export const constructSlice = createSlice({
       },
     },
     deleteAllConstructIngredients: {
-      //   reducer: (state) => {
-      //     state.ingredient = null;
-      //   },
       reducer: (state) => {
         state.consruct.ingredients = [];
         state.consruct.bun = null;
+      },
+    },
+    moveConstructIngredients: {
+      reducer: (state, action) => {
+        const { draggableIndex, index } = action.payload;
+        const newIngredients = state.consruct.ingredients;
+        [newIngredients[draggableIndex], newIngredients[index]] = [newIngredients[index], newIngredients[draggableIndex]];
+        state.consruct.ingredients = newIngredients;
       },
     },
   },
 });
 
 export const constructReducer = constructSlice.reducer;
-export const { deleteAllConstructIngredients, addConstructIngredient, deleteConstructIngredient } =
-  constructSlice.actions;
+export const {
+  deleteAllConstructIngredients,
+  addConstructIngredient,
+  deleteConstructIngredient,
+  moveConstructIngredients,
+} = constructSlice.actions;

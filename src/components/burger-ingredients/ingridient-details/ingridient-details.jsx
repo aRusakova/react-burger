@@ -1,13 +1,8 @@
 import styles from "./ingridient-details.module.scss";
 import classNames from "classnames";
-import { ingridietPropTypes } from "../../../utils/data";
 import { useSelector } from 'react-redux';
 
-// IngredientDetails.propTypes = {
-//   ingrInModal: ingridietPropTypes,
-// };
 
-// function IngredientDetails(ingrInModal) {
 function IngredientDetails() {
   const  { ingredient } = useSelector((store) => store.ingredient);
   return (

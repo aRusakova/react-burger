@@ -13,7 +13,7 @@ import {
   deleteAllConstructIngredients,
   deleteConstructIngredient,
 } from "../../services/burger-constructor/reducer";
-import { addOrder } from "../../services/burger-order/actions";
+import { addOrder, clearOrder } from "../../services/burger-order/actions";
 import Loader from "../loader/loader";
 import Error from "../error/error";
 import { useDrop } from "react-dnd";
@@ -44,12 +44,12 @@ function BurgerConstructor() {
 
   const createOrder = (ingredients, bun) => {
     const orderProductsId = [...ingredients, bun, bun].map((elem) => elem._id);
-    console.log(orderProductsId);
     dispatch(addOrder(orderProductsId));
   };
 
   const closeOrderDetails = () => {
     dispatch(deleteAllConstructIngredients());
+    dispatch(clearOrder());
   };
 
   const [{ isHoverBun, isHoverIngr }, dropTarget] = useDrop({
@@ -151,7 +151,7 @@ function BurgerConstructor() {
           )}
         </div>
       </section>
-      {order && ingredients.length && bun && !loading && !error && (
+      {order && !loading && !error && bun && ingredients.length && (
         <Modal closeModal={closeOrderDetails}>
           <OrderDetails />
         </Modal>

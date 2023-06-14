@@ -1,4 +1,4 @@
-import { addOrder } from "./actions";
+import { addOrder, clearOrder } from "./actions";
 import { createSlice } from "@reduxjs/toolkit";
 
 const orderSlice = createSlice({
@@ -22,6 +22,11 @@ const orderSlice = createSlice({
       .addCase(addOrder.fulfilled, (state, action) => {
         state.loading = false;
         state.order = action.payload;
+      })
+      .addCase(clearOrder, (state) => {
+        state.loading = false;
+        state.error = null;
+        state.order = null;
       });
   },
 });

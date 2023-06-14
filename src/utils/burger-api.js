@@ -1,21 +1,23 @@
-const url = "https://norma.nomoreparties.space/api";
+const baseUrl = "https://norma.nomoreparties.space/api";
 
 const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
   }
-
   return Promise.reject(`Ошибка ${res.status}`);
 };
 
+function request(endpoint, options) {
+  const url = baseUrl + endpoint;
+  return fetch(url, options).then(checkResponse);
+}
+
 export const getIngredients = () => {
-  return fetch(`${url}/ingredients`)
-    .then(checkResponse)
-    .then((response) => response.data);
+  return request("/ingredients").then((response) => response.data);
 };
 
 export const addOrderToApi = (ingredients) => {
-  return fetch(`${url}/orders`, {
+  const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +25,6 @@ export const addOrderToApi = (ingredients) => {
     body: JSON.stringify({
       ingredients: ingredients,
     }),
-  })
-    .then(checkResponse)
-    .then((response) => response);
+  };
+  return request("/orders", requestOptions).then((response) => response);
 };

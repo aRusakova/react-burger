@@ -1,5 +1,6 @@
 import { addOrderToApi } from "../../utils/burger-api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAction } from '@reduxjs/toolkit';
 
 export const addOrder = createAsyncThunk(
   "order/addOrder",
@@ -11,3 +12,6 @@ export const addOrder = createAsyncThunk(
     }
   }
 );
+
+export const clearOrder = createAction('ORDER_CLEAR');
+

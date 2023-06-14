@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "./App.scss";
+import styles from "./app.module.scss";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
@@ -23,11 +23,11 @@ function App() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="wrapper">
+      <div className={styles.wrapper}>
         <AppHeader />
         {loading && <Loader />}
         {!loading && !error && ingredients.length && (
-          <main className="main">
+          <main className={styles.main}>
             <BurgerIngredients />
             <BurgerConstructor />
           </main>

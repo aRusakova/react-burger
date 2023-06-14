@@ -41,8 +41,6 @@ function BurgerConstructorItem({ data, deleteIngredient, index, type, isHoverBun
         }
 
         if (index != null) {
-          console.log(draggableIndex, index);
-          // item.index = index;
           dispatch(moveConstructIngredients({draggableIndex, index}));
           
         }

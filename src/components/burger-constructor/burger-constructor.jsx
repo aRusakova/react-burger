@@ -1,73 +1,127 @@
 import styles from "./burger-constructor.module.scss";
-import PropTypes from "prop-types";
-import { ingridietPropTypes } from "../../utils/data";
 import classNames from "classnames";
 import {
-  ConstructorElement,
-  DragIcon,
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addConstructIngredient,
+  deleteAllConstructIngredients,
+  deleteConstructIngredient,
+} from "../../services/burger-constructor/reducer";
+import { addOrder, clearOrder } from "../../services/burger-order/actions";
+import Loader from "../loader/loader";
+import Error from "../error/error";
+import { useDrop } from "react-dnd";
+import BurgerConstructorItem from "./burger-constructor-item/burger-constructor-item";
 
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(ingridietPropTypes).isRequired,
-};
+function BurgerConstructor() {
+  const dispatch = useDispatch();
 
-function BurgerConstructor({ data }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const allIngredients = useSelector((store) => store.ingredients.ingredients);
+  const { bun } = useSelector((store) => store.construct.consruct);
+  const { ingredients } = useSelector((store) => store.construct.consruct);
+  const { error, loading, order } = useSelector((store) => store.order);
 
-  const buns = useMemo(
-    () => data.filter((item) => item.type === "bun"),
-    [data]
-  );
+  const totalCounter = useMemo(() => {
+    let total;
+    if (ingredients) {
+      total = ingredients.reduce((acc, elem) => acc + elem.price, 0);
+      if (bun) {
+        total += bun.price * 2;
+      }
+      return total;
+    }
+  }, [ingredients, bun]);
 
-  const fillings = useMemo(
-    () => data.filter((item) => item.type === "sauce" || item.type === "main"),
-    [data]
-  );
+  const deleteIngredient = (id) => {
+    dispatch(deleteConstructIngredient(id));
+  };
 
-  const totalCounter = useMemo(
-    () => fillings.reduce((acc, elem) => acc + elem.price, buns[0].price * 2),
-    [fillings, buns]
-  );
+  const createOrder = (ingredients, bun) => {
+    const orderProductsId = [...ingredients, bun, bun].map((elem) => elem._id);
+    dispatch(addOrder(orderProductsId));
+  };
+
+  const closeOrderDetails = () => {
+    dispatch(deleteAllConstructIngredients());
+    dispatch(clearOrder());
+  };
+
+  const [{ isHoverBun, isHoverIngr }, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop: (item) => {
+      onDropHandler(item);
+    },
+    collect: (monitor) => ({
+      isHoverBun: monitor.isOver() && monitor.getItem().type === "bun",
+      isHoverIngr:
+        monitor.isOver() &&
+        (monitor.getItem().type === "main" ||
+          monitor.getItem().type === "sauce"),
+    }),
+  });
+
+  const onDropHandler = (item) => {
+    const draggedElement = allIngredients.find((elem) => elem._id === item.id);
+    dispatch(addConstructIngredient(draggedElement));
+  };
 
   return (
     <>
       <section className={classNames(styles.wrapper, "pt-25")}>
-        <ul className={classNames(styles.constructorList, "mb-10")}>
+        <ul
+          className={classNames(styles.constructorList, "mb-10")}
+          ref={dropTarget}
+        >
           <li className={styles.constructorItem}>
-            <ConstructorElement
-              type="top"
-              isLocked={true}
-              text={`${buns[0].name} (верх)`}
-              price={buns[0].price}
-              thumbnail={buns[0].image}
+            <BurgerConstructorItem
+              type="bun"
+              top={true}
+              isHoverBun={isHoverBun}
             />
           </li>
-          <ul className={classNames(styles.fillingsList, "custom-scroll")}>
-            {fillings.map((elem) => (
-              <li className={styles.fillingsItem} key={elem._id}>
-                <DragIcon type="primary" />
-                <ConstructorElement
-                  type="bottom"
-                  isLocked={false}
-                  text={elem.name}
-                  price={elem.price}
-                  thumbnail={elem.image}
+          <ul
+            className={classNames(
+              styles.fillingsList,
+              "custom-scroll",
+              isHoverIngr && ingredients.length && styles.hover
+            )}
+          >
+            {ingredients.length ? (
+              ingredients.map((elem, index) => (
+                <li className={styles.fillingsItem} key={elem.key}>
+                  <BurgerConstructorItem
+                    type="ingredient"
+                    data={elem}
+                    index={index}
+                    deleteIngredient={deleteIngredient}
+                  />
+                </li>
+              ))
+            ) : (
+              <li
+                className={classNames(
+                  styles.fillingsItem,
+                  styles.fillingsItem_empty
+                )}
+              >
+                <BurgerConstructorItem
+                  type="ingredient"
+                  isHoverIngr={isHoverIngr}
                 />
               </li>
-            ))}
+            )}
           </ul>
           <li className={styles.constructorItem}>
-            <ConstructorElement
-              type="bottom"
-              isLocked={true}
-              text={`${buns[0].name} (низ)`}
-              price={buns[0].price}
-              thumbnail={buns[0].image}
+            <BurgerConstructorItem
+              type="bun"
+              top={false}
+              isHoverBun={isHoverBun}
             />
           </li>
         </ul>
@@ -83,21 +137,27 @@ function BurgerConstructor({ data }) {
             </p>
             <CurrencyIcon type="primary" />
           </div>
-          <Button
-            htmlType="button"
-            type="primary"
-            size="large"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Оформить заказ
-          </Button>
+          {ingredients.length && bun ? (
+            <Button
+              htmlType="button"
+              type="primary"
+              size="large"
+              onClick={() => createOrder(ingredients, bun)}
+            >
+              Оформить заказ
+            </Button>
+          ) : (
+            <div></div>
+          )}
         </div>
       </section>
-      {isModalOpen && (
-        <Modal closeModal={() => setIsModalOpen(false)}>
+      {order && !loading && !error && bun && ingredients.length && (
+        <Modal closeModal={closeOrderDetails}>
           <OrderDetails />
         </Modal>
       )}
+      {loading && <Loader />}
+      {error && <Error />}
     </>
   );
 }

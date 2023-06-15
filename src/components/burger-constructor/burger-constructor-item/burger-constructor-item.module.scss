@@ -1,0 +1,28 @@
+.ingredientWrapper {
+  width: 100%;
+}
+
+.ingredientContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ingridientHover {
+  opacity: 0.7;
+}
+
+.empty {
+  width: 536px;
+  display: flex;
+  justify-content: center;
+
+  img,
+  svg {
+    display: none;
+  }
+}
+
+.hover {
+  border: 1px solid #fff;
+}

@@ -1,33 +1,53 @@
-import { useMemo, useState } from "react";
-import { ingridietPropTypes } from "../../utils/data";
-import PropTypes from "prop-types";
+import { useMemo, useRef, useState } from "react";
 import styles from "./burger-ingredients.module.scss";
 import classNames from "classnames";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsList from "./burger-ingredients-list/burger-ingredients-list";
 import Modal from "../modal/modal";
 import IngredientDetails from "./ingridient-details/ingridient-details";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteIngredient } from "../../services/burger-ingredient/reducer";
 
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(ingridietPropTypes).isRequired,
-};
+function BurgerIngredients() {
+  const dispatch = useDispatch();
 
-function BurgerIngredients({ data }) {
   const [category, setCategory] = useState("buns");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ingrInModal, setIngrInModal] = useState(null);
+
+  const { ingredients } = useSelector((store) => store.ingredients);
+  const { ingredient } = useSelector((store) => store.ingredient);
+
+  const tabsRef = useRef();
+  const bunsRef = useRef();
+  const saucesRef = useRef();
+  const mainsRef = useRef();
+
+  const currentTab = () => {
+    const tubsPosition = tabsRef?.current?.getBoundingClientRect().bottom;
+    const bunsPosition  = bunsRef?.current?.getBoundingClientRect().top;
+    const saucesPosition  = saucesRef?.current?.getBoundingClientRect().top;
+    const mainsPosition  = mainsRef?.current?.getBoundingClientRect().top;
+
+    const bunsToTubs = Math.abs(tubsPosition - bunsPosition);
+    const saucesToTabs = Math.abs(tubsPosition - saucesPosition);
+    const mainsToTubs = Math.abs(tubsPosition - mainsPosition);
+
+    const minimum = Math.min(bunsToTubs, saucesToTabs, mainsToTubs);
+
+    return minimum === bunsToTubs ? setCategory("buns") : minimum === saucesToTabs ? setCategory("sauces") : minimum === mainsToTubs ? setCategory("mains") : '';
+
+  };
 
   const buns = useMemo(
-    () => data.filter((item) => item.type === "bun"),
-    [data]
+    () => ingredients.filter((item) => item.type === "bun"),
+    [ingredients]
   );
   const sauces = useMemo(
-    () => data.filter((item) => item.type === "sauce"),
-    [data]
+    () => ingredients.filter((item) => item.type === "sauce"),
+    [ingredients]
   );
   const mains = useMemo(
-    () => data.filter((item) => item.type === "main"),
-    [data]
+    () => ingredients.filter((item) => item.type === "main"),
+    [ingredients]
   );
 
   const scrollTo = (id) => {
@@ -36,14 +56,8 @@ function BurgerIngredients({ data }) {
     if (element) element.scrollIntoView({ behavior: "smooth" });
   };
 
-  const clickOnIngridient = (ingridient) => {
-    setIngrInModal(ingridient);
-    setIsModalOpen(true);
-  };
-
   const closeModal = () => {
-    setIngrInModal(null);
-    setIsModalOpen(false);
+    dispatch(deleteIngredient());
   };
 
   return (
@@ -58,7 +72,7 @@ function BurgerIngredients({ data }) {
         >
           Соберите бургер
         </h3>
-        <nav className={classNames(styles.toggleBlock, "mb-10")}>
+        <nav className={classNames(styles.toggleBlock, "mb-10")} ref={tabsRef}>
           <Tab
             value="Булки"
             active={category === "buns"}
@@ -83,30 +97,36 @@ function BurgerIngredients({ data }) {
             </Tab>
           </div>
         </nav>
-        <div className={classNames(styles.block, "custom-scroll")}>
-          <BurgerIngredientsList
-            title="Булки"
-            data={buns}
-            type="buns"
-            clickOnIngridient={clickOnIngridient}
-          />
-          <BurgerIngredientsList
-            title="Соусы"
-            data={sauces}
-            type="sauces"
-            clickOnIngridient={clickOnIngridient}
-          />
-          <BurgerIngredientsList
-            title="Начинки"
-            data={mains}
-            type="mains"
-            clickOnIngridient={clickOnIngridient}
-          />
+        <div
+          className={classNames(styles.block, "custom-scroll")}
+          onScroll={currentTab}
+        >
+          <div ref={bunsRef}>
+            <BurgerIngredientsList
+              title="Булки"
+              data={buns}
+              type="buns"
+            />
+          </div>
+          <div ref={saucesRef}>
+            <BurgerIngredientsList
+              title="Соусы"
+              data={sauces}
+              type="sauces"
+            />
+          </div>
+          <div ref={mainsRef}>
+            <BurgerIngredientsList
+              title="Начинки"
+              data={mains}
+              type="mains"
+            />
+          </div>
         </div>
       </section>
-      {isModalOpen && (
+      {ingredient && (
         <Modal closeModal={closeModal}>
-          <IngredientDetails {...ingrInModal} />
+          <IngredientDetails />
         </Modal>
       )}
     </>

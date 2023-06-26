@@ -1,0 +1,39 @@
+.wrapper {
+  max-width: 860px;
+  margin: 120px auto 0;
+  display: flex;
+  position: relative;
+}
+
+.profileMenu {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+}
+
+.menuItem {
+  a {
+    text-decoration: none;
+    display: block;
+    padding: 20px 0;
+  }
+
+  .active {
+    .menuItemText {
+        color: #F2F2F3;
+    }
+  }
+
+  .pending {
+    .menuItemText {
+        color: #8585AD;
+    }
+  }
+}
+
+.button {
+  cursor: pointer;
+  border: none;
+  background-color: inherit;
+  padding: 20px 0;
+}

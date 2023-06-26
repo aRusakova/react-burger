@@ -3,18 +3,13 @@ import styles from "./burger-ingredients.module.scss";
 import classNames from "classnames";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsList from "./burger-ingredients-list/burger-ingredients-list";
-import Modal from "../modal/modal";
-import IngredientDetails from "./ingridient-details/ingridient-details";
-import { useSelector, useDispatch } from "react-redux";
-import { deleteIngredient } from "../../services/burger-ingredient/reducer";
+import { useSelector } from "react-redux";
 
 function BurgerIngredients() {
-  const dispatch = useDispatch();
 
   const [category, setCategory] = useState("buns");
 
   const { ingredients } = useSelector((store) => store.ingredients);
-  const { ingredient } = useSelector((store) => store.ingredient);
 
   const tabsRef = useRef();
   const bunsRef = useRef();
@@ -54,10 +49,6 @@ function BurgerIngredients() {
     setCategory(id);
     const element = document.getElementById(id);
     if (element) element.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const closeModal = () => {
-    dispatch(deleteIngredient());
   };
 
   return (
@@ -124,11 +115,6 @@ function BurgerIngredients() {
           </div>
         </div>
       </section>
-      {ingredient && (
-        <Modal closeModal={closeModal}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </>
   );
 }

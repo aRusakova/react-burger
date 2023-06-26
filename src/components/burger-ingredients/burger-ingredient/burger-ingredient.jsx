@@ -5,28 +5,24 @@ import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { addIngredient } from "../../../services/burger-ingredient/reducer";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import { useDrag } from "react-dnd";
+import { Link, useLocation } from "react-router-dom";
 
 BurgerIngredient.propTypes = {
   data: ingridietPropTypes,
 };
 
 function BurgerIngredient({ data }) {
-  
-  const dispatch = useDispatch();
 
-  const clickOnIngridient = (ingredient) => {
-    dispatch(addIngredient(ingredient));
-  };
+  const location = useLocation();
 
   const { ingredients, bun } = useSelector((store) => store.construct.consruct);
 
   const bunCounter = useMemo(() => {
     if (bun) {
-      return bun._id === data._id ? 2 : '';
+      return bun._id === data._id ? 2 : "";
     }
   }, [bun, data._id]);
 
@@ -49,31 +45,32 @@ function BurgerIngredient({ data }) {
   });
 
   return (
-    <section
-      className={styles.wrapper}
-      onClick={() => clickOnIngridient(data)}
-      ref={dragRef}
-    >
-      <img src={data.image} alt="" className="mb-1" />
-      <div className={classNames(styles.priceBlock, "mb-1")}>
-        <p className="text text_type_digits-default">{data.price}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-      <p className={classNames(styles.name, "text text_type_main-default")}>
-        {data.name}
-      </p>
-      {data.type === "bun"
-        ? bunCounter && (
-            <Counter count={bunCounter} size="default" extraClass="m-1" />
-          )
-        : ingredientCounter && (
-            <Counter
-              count={ingredientCounter}
-              size="default"
-              extraClass="m-1"
-            />
-          )}
-    </section>
+      <Link
+        className={styles.wrapper}
+        ref={dragRef}
+        to={`/ingredients/${data._id}`}
+        state={{background: location }}
+        >
+        <img src={data.image} alt="" className="mb-1" />
+        <div className={classNames(styles.priceBlock, "mb-1")}>
+          <p className="text text_type_digits-default">{data.price}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <p className={classNames(styles.name, "text text_type_main-default")}>
+          {data.name}
+        </p>
+        {data.type === "bun"
+          ? bunCounter && (
+              <Counter count={bunCounter} size="default" extraClass="m-1" />
+            )
+          : ingredientCounter && (
+              <Counter
+                count={ingredientCounter}
+                size="default"
+                extraClass="m-1"
+              />
+            )}
+      </Link>
   );
 }
 

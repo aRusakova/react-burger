@@ -6,7 +6,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { fetchWithRefresh } from "../../utils/burger-api";
+import { createReguestOptions, fetchWithRefresh } from "../../utils/burger-api";
 
 function ForfotPassword() {
 
@@ -19,21 +19,11 @@ function ForfotPassword() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: localStorage.getItem("accessToken"),
-        },
-        body: JSON.stringify({
-          email: formValues.email,
-        }),
-      };
+      const requestOptions = createReguestOptions("POST", formValues, true);
       await fetchWithRefresh("/password-reset", requestOptions);
       localStorage.setItem("fromForgotPasswordPage", true);
       navigate("/reset-password");
     } catch (error) {
-      console.log(error.message);
       navigate("/login");
     }
   };

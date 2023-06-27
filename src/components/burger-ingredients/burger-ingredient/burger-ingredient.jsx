@@ -16,6 +16,8 @@ BurgerIngredient.propTypes = {
 
 function BurgerIngredient({ data }) {
 
+  const BUNS = "bun";
+
   const location = useLocation();
 
   const { ingredients, bun } = useSelector((store) => store.construct.consruct);
@@ -59,7 +61,7 @@ function BurgerIngredient({ data }) {
         <p className={classNames(styles.name, "text text_type_main-default")}>
           {data.name}
         </p>
-        {data.type === "bun"
+        {data.type === BUNS
           ? bunCounter && (
               <Counter count={bunCounter} size="default" extraClass="m-1" />
             )

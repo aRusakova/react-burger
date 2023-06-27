@@ -1,5 +1,10 @@
 const baseUrl = "https://norma.nomoreparties.space/api";
 
+const POST = "POST";
+const GET = "GET";
+const PATCH = "PATCH";
+
+
 const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
@@ -7,9 +12,20 @@ const checkResponse = (res) => {
   return Promise.reject(`Ошибка ${res.status}`);
 };
 
-function request(endpoint, options) {
+const request = (endpoint, options) => {
   const url = baseUrl + endpoint;
   return fetch(url, options).then(checkResponse);
+}
+
+export const createReguestOptions = (method, bodyItem, token) => {
+  return {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? {authorization: localStorage.getItem('accessToken')} : {}),
+    },
+    ...(bodyItem ? {body: JSON.stringify({...bodyItem})} : {}),
+  };
 }
 
 export const getIngredients = () => {
@@ -17,29 +33,16 @@ export const getIngredients = () => {
 };
 
 export const addOrderToApi = (ingredients) => {
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: localStorage.getItem('accessToken'),
-    },
-    body: JSON.stringify({
-      ingredients: ingredients,
-    }),
-  };
+  const orderIngredients = {
+    ingredients,
+  }
+  const requestOptions = createReguestOptions(POST, orderIngredients, true);
   return request("/orders", requestOptions).then((response) => response);
 };
 
 export const refreshToken = () => {
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-    body: JSON.stringify({
-      token: localStorage.getItem("refreshToken"),
-    }),
-  }
+  const refreshToken = {token: localStorage.getItem("refreshToken")};
+  const requestOptions = createReguestOptions(POST, refreshToken);
   return request("/auth/token", requestOptions);
 };
 
@@ -63,74 +66,28 @@ export const fetchWithRefresh = async (url, options) => {
 };
 
 export const register = (user) => {
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: user.email,
-      password: user.password,
-      name: user.name
-    }),
-  };
+  const requestOptions = createReguestOptions(POST, user);
   return request("/auth/register", requestOptions).then((response) => response);
 }
 
-
-//нужен токен в хедере и обновление токена
 export const login = (user) => {
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: localStorage.getItem('accessToken'),
-    },
-    body: JSON.stringify({
-      email: user.email,
-      password: user.password,
-    }),
-  };
+  const requestOptions = createReguestOptions(POST, user, true);
   return fetchWithRefresh("/auth/login", requestOptions).then((response) => response);
 }
 
 export const logout = () => {
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      token: localStorage.getItem("refreshToken"),
-    }),
-  };
+  const refreshToken = {token: localStorage.getItem("refreshToken")};
+  const requestOptions = createReguestOptions(POST, refreshToken);
   return fetchWithRefresh("/auth/logout", requestOptions).then((response) => response);
 }
 
 //получение юзера по токену
 export const getUser = () => {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: localStorage.getItem('accessToken'),
-    },
-  };
+  const requestOptions = createReguestOptions(GET, null, refreshToken);
   return fetchWithRefresh("/auth/user", requestOptions).then((response) => response);
 }
 
 export const editUser = (user) => {
-  const requestOptions = {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: localStorage.getItem('accessToken'),
-    },
-    body: JSON.stringify({
-      email: user.email,
-      name: user.name,
-      password: user.password,
-    }),
-  };
+  const requestOptions = createReguestOptions(PATCH, user, true);
   return fetchWithRefresh("/auth/user", requestOptions).then((response) => response);
 }

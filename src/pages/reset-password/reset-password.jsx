@@ -7,7 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { fetchWithRefresh } from "../../utils/burger-api";
+import { createReguestOptions, fetchWithRefresh } from "../../utils/burger-api";
 
 function ResetPassword() {
 
@@ -15,28 +15,18 @@ function ResetPassword() {
 
   const { formValues, handleInputChange } = useForm({
     password: "",
-    code: "",
+    token: "",
   });
 
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: localStorage.getItem("accessToken"),
-        },
-        body: JSON.stringify({
-          password: formValues.password,
-          token: formValues.code,
-        }),
-      };
+      const requestOptions = createReguestOptions("POST", formValues, true);
       await fetchWithRefresh("/password-reset/reset", requestOptions);
       localStorage.removeItem("fromForgotPasswordPage", true);
       navigate("/login");
     } catch (error) {
-      console.log(error.message);
+      navigate("/forgot-password");
     }
   };
 
@@ -61,8 +51,8 @@ function ResetPassword() {
           type={"text"}
           placeholder={"Введите код из письма"}
           onChange={handleInputChange}
-          value={formValues.code}
-          name={"code"}
+          value={formValues.token}
+          name={"token"}
           size={"default"}
           extraClass="mb-6"
         />

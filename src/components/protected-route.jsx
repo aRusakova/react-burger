@@ -1,8 +1,14 @@
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 import Loader from "./loader/loader";
+import PropTypes from "prop-types";
 
-const Protected = ({ onlyAuth, component }) => {
+Protected.propTypes = {
+  onlyAuth: PropTypes.bool.isRequired,
+  component: PropTypes.object.isRequired,
+};
+
+function Protected ({ onlyAuth, component }) {
   const isAuthChecked = useSelector((store) => store.user.isAuthChecked);
   const user = useSelector((store) => store.user.user);
   const location = useLocation();

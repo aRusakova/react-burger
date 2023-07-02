@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-
+import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from "./reportWebVitals";
 import { configureStore } from "./services/store";
 import { Provider } from "react-redux";
-import App from "./components/app/app";
+import App from "./components/app/App";
 
 const store = configureStore();
 
@@ -14,9 +14,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    <BrowserRouter>
     <Provider store={store}>
       <App />
     </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

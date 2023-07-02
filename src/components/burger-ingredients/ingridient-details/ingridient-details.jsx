@@ -1,22 +1,30 @@
 import styles from "./ingridient-details.module.scss";
 import classNames from "classnames";
-import { useSelector } from 'react-redux';
-
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
 function IngredientDetails() {
-  const  { ingredient } = useSelector((store) => store.ingredient);
+  const { ingredients } = useSelector((store) => store.ingredients);
+  let { ingredientId } = useParams();
+
+  const ingredient = useMemo(
+    () => ingredients.find((ingredient) => ingredient._id === ingredientId),
+    [ingredientId, ingredients]
+  );
+
   return (
     <section className={classNames(styles.wrapper, "mt-10 mr-10 mb-15 ml-10")}>
       <p className={classNames(styles.title, "text text_type_main-large")}>
         Детали ингредиента
       </p>
       <img
-        src={ingredient.image_large}
-        alt={ingredient.name}
+        src={ingredient?.image_large}
+        alt={ingredient?.name}
         className="mb-4"
       />
       <p className={classNames("text text_type_main-medium", "mb-8")}>
-        {ingredient.name}
+        {ingredient?.name}
       </p>
       <ul className={styles.elementsBlock}>
         <li className={classNames(styles.elementsItem, "mr-5")}>
@@ -24,7 +32,7 @@ function IngredientDetails() {
             Калории,ккал
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {ingredient.calories}
+            {ingredient?.calories}
           </p>
         </li>
         <li className={classNames(styles.elementsItem, "mr-5")}>
@@ -32,7 +40,7 @@ function IngredientDetails() {
             Белки, г
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {ingredient.proteins}
+            {ingredient?.proteins}
           </p>
         </li>
         <li className={classNames(styles.elementsItem, "mr-5")}>
@@ -40,7 +48,7 @@ function IngredientDetails() {
             Жиры, г
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {ingredient.fat}
+            {ingredient?.fat}
           </p>
         </li>
         <li className={styles.elementsItem}>
@@ -48,7 +56,7 @@ function IngredientDetails() {
             Углеводы, г
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {ingredient.carbohydrates}
+            {ingredient?.carbohydrates}
           </p>
         </li>
       </ul>

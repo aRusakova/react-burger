@@ -18,14 +18,17 @@ import Loader from "../loader/loader";
 import Error from "../error/error";
 import { useDrop } from "react-dnd";
 import BurgerConstructorItem from "./burger-constructor-item/burger-constructor-item";
+import { useNavigate } from "react-router";
 
 function BurgerConstructor() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const allIngredients = useSelector((store) => store.ingredients.ingredients);
   const { bun } = useSelector((store) => store.construct.consruct);
   const { ingredients } = useSelector((store) => store.construct.consruct);
   const { error, loading, order } = useSelector((store) => store.order);
+  const user = useSelector((store) => store.user.user);
 
   const totalCounter = useMemo(() => {
     let total;
@@ -142,7 +145,7 @@ function BurgerConstructor() {
               htmlType="button"
               type="primary"
               size="large"
-              onClick={() => createOrder(ingredients, bun)}
+              onClick={() => user ? createOrder(ingredients, bun) : navigate("/login")}
             >
               Оформить заказ
             </Button>

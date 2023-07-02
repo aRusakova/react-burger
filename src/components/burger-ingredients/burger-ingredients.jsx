@@ -3,18 +3,17 @@ import styles from "./burger-ingredients.module.scss";
 import classNames from "classnames";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsList from "./burger-ingredients-list/burger-ingredients-list";
-import Modal from "../modal/modal";
-import IngredientDetails from "./ingridient-details/ingridient-details";
-import { useSelector, useDispatch } from "react-redux";
-import { deleteIngredient } from "../../services/burger-ingredient/reducer";
+import { useSelector } from "react-redux";
 
 function BurgerIngredients() {
-  const dispatch = useDispatch();
 
-  const [category, setCategory] = useState("buns");
+  const BUNS = "bun";
+  const SAUCES = "sauce";
+  const MAINS = "main";
+
+  const [category, setCategory] = useState(BUNS);
 
   const { ingredients } = useSelector((store) => store.ingredients);
-  const { ingredient } = useSelector((store) => store.ingredient);
 
   const tabsRef = useRef();
   const bunsRef = useRef();
@@ -33,20 +32,20 @@ function BurgerIngredients() {
 
     const minimum = Math.min(bunsToTubs, saucesToTabs, mainsToTubs);
 
-    return minimum === bunsToTubs ? setCategory("buns") : minimum === saucesToTabs ? setCategory("sauces") : minimum === mainsToTubs ? setCategory("mains") : '';
+    return minimum === bunsToTubs ? setCategory(BUNS) : minimum === saucesToTabs ? setCategory(SAUCES) : minimum === mainsToTubs ? setCategory(MAINS) : '';
 
   };
 
   const buns = useMemo(
-    () => ingredients.filter((item) => item.type === "bun"),
+    () => ingredients.filter((item) => item.type === BUNS),
     [ingredients]
   );
   const sauces = useMemo(
-    () => ingredients.filter((item) => item.type === "sauce"),
+    () => ingredients.filter((item) => item.type === SAUCES),
     [ingredients]
   );
   const mains = useMemo(
-    () => ingredients.filter((item) => item.type === "main"),
+    () => ingredients.filter((item) => item.type === MAINS),
     [ingredients]
   );
 
@@ -54,10 +53,6 @@ function BurgerIngredients() {
     setCategory(id);
     const element = document.getElementById(id);
     if (element) element.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const closeModal = () => {
-    dispatch(deleteIngredient());
   };
 
   return (
@@ -75,23 +70,23 @@ function BurgerIngredients() {
         <nav className={classNames(styles.toggleBlock, "mb-10")} ref={tabsRef}>
           <Tab
             value="Булки"
-            active={category === "buns"}
-            onClick={() => scrollTo("buns")}
+            active={category === BUNS}
+            onClick={() => scrollTo(BUNS)}
           >
             Булки
           </Tab>
           <Tab
             value="Соусы"
-            active={category === "sauces"}
-            onClick={() => scrollTo("sauces")}
+            active={category === SAUCES}
+            onClick={() => scrollTo(SAUCES)}
           >
             Соусы
           </Tab>
           <div>
             <Tab
               value="Начинки"
-              active={category === "mains"}
-              onClick={() => scrollTo("mains")}
+              active={category === MAINS}
+              onClick={() => scrollTo(MAINS)}
             >
               Начинки
             </Tab>
@@ -105,30 +100,25 @@ function BurgerIngredients() {
             <BurgerIngredientsList
               title="Булки"
               data={buns}
-              type="buns"
+              type={BUNS}
             />
           </div>
           <div ref={saucesRef}>
             <BurgerIngredientsList
               title="Соусы"
               data={sauces}
-              type="sauces"
+              type={SAUCES}
             />
           </div>
           <div ref={mainsRef}>
             <BurgerIngredientsList
               title="Начинки"
               data={mains}
-              type="mains"
+              type={MAINS}
             />
           </div>
         </div>
       </section>
-      {ingredient && (
-        <Modal closeModal={closeModal}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </>
   );
 }

@@ -3,6 +3,7 @@ import { ingredientsReducer } from './burger-ingredients/reducer';
 import { ingredientReducer } from './burger-ingredient/reducer';
 import { constructReducer } from './burger-constructor/reducer';
 import { orderReducer } from './burger-order/reducer';
+import { userReducer } from './user/reducer';
 
 export const configureStore = () => {
   const store = createStore({
@@ -11,6 +12,7 @@ export const configureStore = () => {
       ingredient: ingredientReducer,
       order: orderReducer ,
       construct: constructReducer,
+      user: userReducer,
     },
 });
 

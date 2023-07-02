@@ -50,7 +50,9 @@
   }
 }
 
-.menuItem {
+.menuItem,
+.menuItemActive {
+  text-decoration: none;
   border: none;
   cursor: pointer;
   background: #1c1c21;
@@ -62,6 +64,20 @@
   }
 }
 
-.menuText {
-  color: #f2f2f3;
+.menuItem {
+  svg {
+    fill: #8585ad;
+  }
+  .menuText {
+    color: #8585ad;
+  }
+}
+
+.menuItemActive {
+  svg {
+    fill: #f2f2f3;
+  }
+  .menuText {
+    color: #f2f2f3;
+  }
 }

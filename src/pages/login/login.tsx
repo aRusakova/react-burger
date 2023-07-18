@@ -9,8 +9,9 @@ import { Link } from "react-router-dom";
 import useForm from "../../hooks/useForm";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../services/user/actions";
+import { FormEvent } from "react";
 
-function Login() {
+function Login(): JSX.Element {
 
   const dispatch = useDispatch();
 
@@ -19,8 +20,9 @@ function Login() {
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //@ts-ignore
     dispatch(loginUser(formValues));
   };
 

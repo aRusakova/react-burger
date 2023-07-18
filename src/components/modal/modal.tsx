@@ -2,7 +2,7 @@ import styles from "./modal.module.scss";
 import ModalOverlay from "./modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
 import { createPortal } from "react-dom";
-import { useCallback, useEffect, useRef } from "react";
+import { ReactNode, MouseEvent, useCallback, useEffect, useRef } from "react";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 Modal.propTypes = {
@@ -10,11 +10,16 @@ Modal.propTypes = {
   closeModal: PropTypes.func.isRequired,
 };
 
-export default function Modal({ children, closeModal }) {
+export type TModalProps = {
+  children: ReactNode;
+  closeModal: () => void;
+}
 
-  const modalOverlayRef = useRef();
+export default function Modal({ children, closeModal }: TModalProps): JSX.Element {
 
-  const pressEsc = useCallback((e) => {
+  const modalOverlayRef = useRef<HTMLDivElement | null>(null);
+
+  const pressEsc = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape") {
       closeModal();
     }
@@ -27,7 +32,7 @@ export default function Modal({ children, closeModal }) {
     };
   }, [pressEsc]);
 
-  const clickOnLayout = (e) => {
+  const clickOnLayout = (e: MouseEvent<HTMLElement>) => {
     if (e.target === modalOverlayRef.current) {
       closeModal();
     }
@@ -43,6 +48,6 @@ export default function Modal({ children, closeModal }) {
       </div>
       <ModalOverlay overlayRef={modalOverlayRef} />
     </section>,
-    document.getElementById("modals-root")
+    document.getElementById("modals-root") as HTMLElement
   );
 }

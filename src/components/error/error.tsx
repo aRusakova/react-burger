@@ -2,7 +2,7 @@ import styles from "./error.module.scss";
 import { InfoIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames";
 
-function Error() {
+function Error(): JSX.Element {
   return (
     <section className={styles.wrapper}>
         <InfoIcon type="error" />

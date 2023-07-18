@@ -5,9 +5,13 @@ export const loadIngredients = createAsyncThunk(
   "ingredients/loadIngredients",
   async (thunkAPI) => {
     try {
-      return await getIngredients();
+      console.log('ffff')
+      const res = await getIngredients();
+      console.log(res);
+      return res;
       
     } catch (error) {
+      console.log('err')
       thunkAPI.rejectWithValue(error.message);
     }
   }

@@ -1,5 +1,4 @@
 import styles from "./burger-ingredient.module.scss";
-import { ingridietPropTypes } from "../../../utils/data";
 import classNames from "classnames";
 import {
   CurrencyIcon,
@@ -9,18 +8,20 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from "react-router-dom";
+import { TIngredient } from "../../../utils/types";
 
-BurgerIngredient.propTypes = {
-  data: ingridietPropTypes,
+type TCounter = {
+  [name: string]: number;
 };
 
-function BurgerIngredient({ data }) {
+function BurgerIngredient({ data }: {data: TIngredient}): JSX.Element {
 
   const BUNS = "bun";
 
   const location = useLocation();
 
-  const { ingredients, bun } = useSelector((store) => store.construct.consruct);
+  //@ts-ignore
+  const { ingredients, bun }: {ingredients: Ingredient[], bun: Ingredient} = useSelector((store) => store.construct.consruct);
 
   const bunCounter = useMemo(() => {
     if (bun) {
@@ -29,7 +30,7 @@ function BurgerIngredient({ data }) {
   }, [bun, data._id]);
 
   const ingredientCounter = useMemo(() => {
-    let counter = {};
+    let counter: TCounter = {};
     ingredients.map((ingredient) => {
       if (!counter[ingredient._id]) {
         counter[ingredient._id] = 1;
@@ -40,6 +41,7 @@ function BurgerIngredient({ data }) {
     });
     return counter[data._id];
   }, [ingredients, data._id]);
+
 
   const [, dragRef] = useDrag({
     type: "ingredient",

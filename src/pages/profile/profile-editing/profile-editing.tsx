@@ -7,11 +7,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import useForm from "../../../hooks/useForm";
 import { getEditedUser } from "../../../services/user/actions";
+import { FormEvent } from "react";
+import { TUser } from "../../../utils/types";
 
-function ProfileEditing() {
+function ProfileEditing(): JSX.Element {
   const dispatch = useDispatch();
-
-  const user = useSelector((store) => store.user.user);
+  //@ts-ignore
+  const user: TUser = useSelector((store) => store.user.user);
 
   const { formValues, handleInputChange, resetForm, hidePassword } = useForm({
     email: user.email,
@@ -19,8 +21,9 @@ function ProfileEditing() {
     name: user.name,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //@ts-ignore
     dispatch(getEditedUser(formValues));
     hidePassword();
   };

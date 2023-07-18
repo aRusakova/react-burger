@@ -1,16 +1,23 @@
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 import Loader from "./loader/loader";
-import PropTypes from "prop-types";
+import { TUser } from "../utils/types";
 
-Protected.propTypes = {
-  onlyAuth: PropTypes.bool.isRequired,
-  component: PropTypes.object.isRequired,
-};
+// Protected.propTypes = {
+//   onlyAuth: PropTypes.bool.isRequired,
+//   component: PropTypes.object.isRequired,
+// };
 
-function Protected ({ onlyAuth, component }) {
-  const isAuthChecked = useSelector((store) => store.user.isAuthChecked);
-  const user = useSelector((store) => store.user.user);
+type TProtectedRouteProps = {
+  onlyAuth: boolean,
+  component: JSX.Element,
+}
+
+function Protected ({ onlyAuth, component }: TProtectedRouteProps): JSX.Element {
+  //@ts-ignore
+  const isAuthChecked:boolean = useSelector((store) => store.user.isAuthChecked);
+  //@ts-ignore
+  const user: TUser = useSelector((store) => store.user.user);
   const location = useLocation();
 
   if (!isAuthChecked) {
@@ -32,9 +39,9 @@ function Protected ({ onlyAuth, component }) {
   return component;
 };
 
-export const OnlyAuth = ({ component }) => (
+export const OnlyAuth = ({ component }: {component: JSX.Element}): JSX.Element => (
   <Protected onlyAuth={true} component={component} />
 );
-export const OnlyUnAuth = ({ component }) => (
+export const OnlyUnAuth = ({ component }: {component: JSX.Element}): JSX.Element => (
   <Protected onlyAuth={false} component={component} />
 );

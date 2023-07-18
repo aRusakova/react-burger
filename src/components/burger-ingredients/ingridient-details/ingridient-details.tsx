@@ -3,9 +3,11 @@ import classNames from "classnames";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { TIngredient } from "../../../utils/types";
 
-function IngredientDetails() {
-  const { ingredients } = useSelector((store) => store.ingredients);
+function IngredientDetails(): JSX.Element {
+  //@ts-ignore
+  const { ingredients }: {ingredients: TIngredient[]} = useSelector((store) => store.ingredients);
   let { ingredientId } = useParams();
 
   const ingredient = useMemo(

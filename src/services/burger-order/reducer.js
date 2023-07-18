@@ -14,7 +14,7 @@ const orderSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(addOrder.rejected, (state, action) => {
+      .addCase(addOrder.rejected, (state, action={}) => {
         state.loading = false;
         state.error = action.payload;
         state.order = null;

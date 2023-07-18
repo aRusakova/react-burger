@@ -1,6 +1,6 @@
 import styles from "./profile-orders.module.scss";
 
-function ProfileOrders() {
+function ProfileOrders(): JSX.Element {
   return (
     <section className={styles.wrapper}>
       <p className="text text_type_main-medium">У вас пока нет заказов</p>

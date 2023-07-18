@@ -2,11 +2,12 @@ import styles from "./order-details.module.scss";
 import classNames from "classnames";
 import Done from '../../../images/done.jpg';
 import { useSelector } from 'react-redux';
+import { TOrder } from "../../../utils/types";
 
 
-function OrderDetails() {
-
-  const { order } = useSelector((store) => store.order);
+function OrderDetails(): JSX.Element {
+  //@ts-ignore
+  const { order }: TOrder = useSelector((store) => store.order);
 
   return (
     <section className={classNames(styles.wrapper, "mt-30 mb-30")}>

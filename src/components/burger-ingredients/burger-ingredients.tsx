@@ -4,21 +4,25 @@ import classNames from "classnames";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsList from "./burger-ingredients-list/burger-ingredients-list";
 import { useSelector } from "react-redux";
+import { TIngredient } from "../../utils/types";
 
-function BurgerIngredients() {
+export type TCategoty = "bun" | "sauce" | "main"; 
+
+function BurgerIngredients(): JSX.Element {
 
   const BUNS = "bun";
   const SAUCES = "sauce";
   const MAINS = "main";
 
-  const [category, setCategory] = useState(BUNS);
+  const [category, setCategory] = useState<TCategoty>(BUNS);
+  
+  //@ts-ignore
+  const ingredients: TIngredient[] = useSelector((store) => store.ingredients.ingredients);
 
-  const { ingredients } = useSelector((store) => store.ingredients);
-
-  const tabsRef = useRef();
-  const bunsRef = useRef();
-  const saucesRef = useRef();
-  const mainsRef = useRef();
+  const tabsRef = useRef<HTMLElement | null>(null);
+  const bunsRef = useRef<HTMLDivElement | null >(null);
+  const saucesRef = useRef<HTMLDivElement | null>(null);
+  const mainsRef = useRef<HTMLDivElement | null>(null);
 
   const currentTab = () => {
     const tubsPosition = tabsRef?.current?.getBoundingClientRect().bottom;
@@ -26,6 +30,7 @@ function BurgerIngredients() {
     const saucesPosition  = saucesRef?.current?.getBoundingClientRect().top;
     const mainsPosition  = mainsRef?.current?.getBoundingClientRect().top;
 
+    if (!tubsPosition || !bunsPosition || !saucesPosition || !mainsPosition) return;
     const bunsToTubs = Math.abs(tubsPosition - bunsPosition);
     const saucesToTabs = Math.abs(tubsPosition - saucesPosition);
     const mainsToTubs = Math.abs(tubsPosition - mainsPosition);
@@ -37,19 +42,19 @@ function BurgerIngredients() {
   };
 
   const buns = useMemo(
-    () => ingredients.filter((item) => item.type === BUNS),
+    () => ingredients?.filter((item) => item.type === BUNS),
     [ingredients]
   );
   const sauces = useMemo(
-    () => ingredients.filter((item) => item.type === SAUCES),
+    () => ingredients?.filter((item) => item.type === SAUCES),
     [ingredients]
   );
   const mains = useMemo(
-    () => ingredients.filter((item) => item.type === MAINS),
+    () => ingredients?.filter((item) => item.type === MAINS),
     [ingredients]
   );
 
-  const scrollTo = (id) => {
+  const scrollTo = (id: TCategoty):void => {
     setCategory(id);
     const element = document.getElementById(id);
     if (element) element.scrollIntoView({ behavior: "smooth" });

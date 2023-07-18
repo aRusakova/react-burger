@@ -1,6 +1,6 @@
 import styles from "./loader.module.scss";
 
-function Loader() {
+function Loader(): JSX.Element {
   return (
     <section className={styles.wrapper}>
         <div className={styles.loader}></div>

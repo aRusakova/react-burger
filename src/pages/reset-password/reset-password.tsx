@@ -8,8 +8,9 @@ import {
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import useForm from "../../hooks/useForm";
 import { createReguestOptions, fetchWithRefresh } from "../../utils/burger-api";
+import { FormEvent } from "react";
 
-function ResetPassword() {
+function ResetPassword(): JSX.Element {
 
   const navigate = useNavigate();
 
@@ -18,12 +19,12 @@ function ResetPassword() {
     token: "",
   });
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const requestOptions = createReguestOptions("POST", formValues, true);
       await fetchWithRefresh("/password-reset/reset", requestOptions);
-      localStorage.removeItem("fromForgotPasswordPage", true);
+      localStorage.removeItem("fromForgotPasswordPage");
       navigate("/login");
     } catch (error) {
       navigate("/forgot-password");

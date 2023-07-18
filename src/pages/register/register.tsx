@@ -2,45 +2,61 @@ import styles from "../form-styles.module.scss";
 import classNames from "classnames";
 import {
   Input,
+  PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { createReguestOptions, fetchWithRefresh } from "../../utils/burger-api";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../services/user/actions";
+import { FormEvent } from "react";
 
-function ForfotPassword() {
 
-  const navigate = useNavigate();
+function Register(): JSX.Element {
+
+  const dispatch = useDispatch();
 
   const { formValues, handleInputChange } = useForm({
     email: "",
+    name: "",
+    password: "",
   });
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const requestOptions = createReguestOptions("POST", formValues, true);
-      await fetchWithRefresh("/password-reset", requestOptions);
-      localStorage.setItem("fromForgotPasswordPage", true);
-      navigate("/reset-password");
-    } catch (error) {
-      navigate("/login");
-    }
+    //@ts-ignore
+    dispatch(registerUser(formValues));
+
   };
 
   return (
     <section className={styles.wrapper}>
       <p className={classNames("mb-6", "text text_type_main-medium")}>
-        Восстановление пароля
+        Регистрация
       </p>
       <form onSubmit={handleSubmit} className={styles.form}>
         <Input
           type={"text"}
-          placeholder="Укажите e-mail"
+          placeholder={"Имя"}
+          onChange={handleInputChange}
+          value={formValues.name}
+          name={"name"}
+          size={"default"}
+          extraClass="mb-6"
+        />
+        <Input
+          type={"text"}
+          placeholder={"E-mail"}
           onChange={handleInputChange}
           value={formValues.email}
           name={"email"}
           size={"default"}
+          extraClass="mb-6"
+        />
+        <PasswordInput
+          onChange={handleInputChange}
+          value={formValues.password}
+          name={"password"}
           extraClass="mb-6"
         />
         <Button
@@ -49,11 +65,11 @@ function ForfotPassword() {
           size="medium"
           extraClass="mb-20"
         >
-          Восстановить
+          Зарегистрироваться
         </Button>
       </form>
       <p className="text text_type_main-default">
-        Вспомнили пароль?&nbsp;
+        Уже зарегистрированы?&nbsp;
         <Link to="/login">
           <Button
             htmlType="button"
@@ -69,4 +85,4 @@ function ForfotPassword() {
   );
 }
 
-export default ForfotPassword;
+export default Register;

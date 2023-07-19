@@ -1,16 +1,16 @@
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
 import styles from "./burger-ingredients-list.module.scss";
 import classNames from "classnames";
-import { TIngredient } from "../../../utils/types";
+import { IIngredient } from "../../../utils/types";
 import { TCategoty } from "../burger-ingredients";
 
-type TIngredientInStore = {
-  data?: TIngredient[],
+interface IComponentProps {
+  data?: IIngredient[],
   title: string,
   type: TCategoty,
 }
 
-function BurgerIngredientsList({data, title, type }: TIngredientInStore): JSX.Element {
+function BurgerIngredientsList({data, title, type }: IComponentProps): JSX.Element {
 
   return (
     <section className={styles.ingridientsBlock} id={type}>

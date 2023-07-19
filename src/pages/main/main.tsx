@@ -4,17 +4,17 @@ import BurgerConstructor from "../../components/burger-constructor/burger-constr
 import Error from "../../components/error/error";
 import Loader from "../../components/loader/loader";
 import { useSelector } from "react-redux";
-import { TIngredient } from "../../utils/types";
+import { IIngredient } from "../../utils/types";
 
-export type TIngredientRequest = {
-  ingredients: TIngredient[],
+export interface IIngredientRequest {
+  ingredients: IIngredient[],
   loading: boolean,
   error: boolean
 };
 
 function Main(): JSX.Element {
   //@ts-ignore
-  const { ingredients, loading, error } = useSelector((store) => store.ingredients);
+  const { ingredients, loading, error }: IIngredientRequest = useSelector((store) => store.ingredients);
 
   return (
     <div className={styles.wrapper}>

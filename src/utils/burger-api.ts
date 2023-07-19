@@ -1,5 +1,5 @@
 import { Exception } from "sass";
-import { TIngredient, TOrder, TUser } from "./types";
+import { IIngredient, IUser } from "./types";
 
 const baseUrl = "https://norma.nomoreparties.space/api";
 
@@ -7,22 +7,22 @@ const POST = "POST";
 const GET = "GET";
 const PATCH = "PATCH";
 
-type TIngredientsResponse = {
+interface IIngredientsResponse {
   success: boolean,
-  data: TIngredient[],
+  data: IIngredient[],
 }
 
-type TUserResponse = {
+type IUserResponse = {
   success: true,
-  user: TUser,
+  user: IUser,
 }
 
-type TUserLogout = {
+type IUserLogout = {
   success: boolean,
   message: string,
 } 
 
-type TRefreahData = {
+type IRefreahData = {
   success: boolean,
   accessToken: string,
   refreshToken: string,
@@ -40,7 +40,7 @@ const request = async<T>(endpoint:string, options?:RequestInit): Promise<T> => {
   return await fetch(url, options).then(checkResponse<T>);
 }
 
-export const createReguestOptions = <T>(method:string, bodyItem:T, token?:boolean | string | null) => {
+export const createReguestOptions = <T>(method:string, bodyItem:T, token?:boolean | null) => {
   return {
     method,
     headers: {
@@ -51,16 +51,16 @@ export const createReguestOptions = <T>(method:string, bodyItem:T, token?:boolea
   };
 }
 
-export const getIngredients = async(): Promise<TIngredient[]> => {
-  return await request<TIngredientsResponse>("/ingredients").then((response) => response.data);
+export const getIngredients = async(): Promise<IIngredient[]> => {
+  return await request<IIngredientsResponse>("/ingredients").then((response) => response.data);
 };
 
-export const addOrderToApi = (ingredients:TIngredient[]):Promise<TUser> => {
+export const addOrderToApi = (ingredients:IIngredient[]):Promise<IUser> => {
   const orderIngredients = {
     ingredients,
   }
-  const requestOptions = createReguestOptions<{ingredients: TIngredient[]}>(POST, orderIngredients, true);
-  return request<TUser>("/orders", requestOptions).then((response) => response);
+  const requestOptions = createReguestOptions<{ingredients: IIngredient[]}>(POST, orderIngredients, true);
+  return request<IUser>("/orders", requestOptions).then((response) => response);
 };
 
 export const refreshToken = <T>():Promise<T> => {
@@ -74,7 +74,7 @@ export const fetchWithRefresh = async <T>(url:string, options:RequestInit): Prom
     return request<T>(url, options);
   } catch (err) {
     if ((err as Exception).message === "jwt expired") {
-      const refreshData: TRefreahData = await refreshToken<TRefreahData>(); //обновляем токен
+      const refreshData: IRefreahData = await refreshToken<IRefreahData>(); //обновляем токен
       if (!refreshData.success) {
         return Promise.reject(refreshData);
       }
@@ -88,30 +88,29 @@ export const fetchWithRefresh = async <T>(url:string, options:RequestInit): Prom
   }
 };
 
-export const register = async(user:TUser):Promise<TUserResponse> => {
+export const register = async(user:IUser):Promise<IUserResponse> => {
   const requestOptions = createReguestOptions(POST, user);
-  return await request<TUserResponse>("/auth/register", requestOptions).then((response) => response);
+  return await request<IUserResponse>("/auth/register", requestOptions).then((response) => response);
 }
 
-export const login = async (user:TUser): Promise<TUserResponse> => {
+export const login = async (user:IUser): Promise<IUserResponse> => {
   const requestOptions = createReguestOptions(POST, user, true);
-  return await fetchWithRefresh<TUserResponse>("/auth/login", requestOptions).then((response) => response);
+  return await fetchWithRefresh<IUserResponse>("/auth/login", requestOptions).then((response) => response);
 }
 
-export const logout = (): Promise<TUserLogout> => {
+export const logout = (): Promise<IUserLogout> => {
   const refreshToken = {token: localStorage.getItem("refreshToken")};
   const requestOptions = createReguestOptions(POST, refreshToken);
-  return fetchWithRefresh<TUserLogout>("/auth/logout", requestOptions).then((response) => response);
+  return fetchWithRefresh<IUserLogout>("/auth/logout", requestOptions).then((response) => response);
 }
 
 //получение юзера по токену
-export const getUser = ():Promise<TUserResponse> => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const requestOptions = createReguestOptions(GET, null, refreshToken);
-  return fetchWithRefresh<TUserResponse>("/auth/user", requestOptions).then((response) => response);
+export const getUser = async():Promise<IUserResponse> => {
+  const requestOptions = createReguestOptions(GET, null, true);
+  return fetchWithRefresh<IUserResponse>("/auth/user", requestOptions).then((response) => response);
 }
 
-export const editUser = (user:TUser): Promise<TUserResponse> => {
+export const editUser = (user:IUser): Promise<IUserResponse> => {
   const requestOptions = createReguestOptions(PATCH, user, true);
-  return fetchWithRefresh<TUserResponse>("/auth/user", requestOptions).then((response) => response);
+  return fetchWithRefresh<IUserResponse>("/auth/user", requestOptions).then((response) => response);
 }

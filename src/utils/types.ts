@@ -1,9 +1,9 @@
-export type TUser = {
+export interface IUser {
     email: string,
     name: string,
 }
 
-export type TIngredient = {
+export interface IIngredient  {
     _id: string,
     name: string,
     proteins: number,
@@ -18,12 +18,8 @@ export type TIngredient = {
     type: string,
 }
 
-type TOrderNum = {
-    number: number,
-}
-
-export type TOrder = {
+export interface IOrder  {
     name: string
-    number: TOrderNum,
+    number: number,
     success: boolean,
 }

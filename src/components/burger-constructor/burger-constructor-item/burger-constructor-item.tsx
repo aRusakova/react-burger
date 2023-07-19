@@ -5,20 +5,20 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrag, useDrop } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { moveConstructIngredients } from "../../../services/burger-constructor/reducer";
-import { TIngredient } from "../../../utils/types";
-import { TIngredientWithKey } from "../burger-constructor";
+import { IIngredient } from "../../../utils/types";
+import { IIngredientWithKey } from "../burger-constructor";
 
-
-type TBurgerConstructorProps = {
+interface IBurgerConstructorProps {
   index?: number;
   type?: "ingredient" | "bun";
-  data?: TIngredientWithKey;
+  data?: IIngredientWithKey;
   deleteIngredient?: (id: number) => void;
   isHoverIngr?: boolean;
   isHoverBun?: boolean;
   top?: boolean;
+  bun?: IIngredient;
 };
 
 function BurgerConstructorItem({
@@ -29,11 +29,9 @@ function BurgerConstructorItem({
   isHoverBun,
   isHoverIngr,
   top,
-}: TBurgerConstructorProps): JSX.Element {
+  bun,
+}: IBurgerConstructorProps): JSX.Element {
   const dispatch = useDispatch();
-
-  //@ts-ignore
-  const { bun }: { bun: TIngredient } = useSelector((store) => store.construct.consruct);
 
   const [, dragRef] = useDrag({
     type: "ingredientConstr",
@@ -69,8 +67,8 @@ function BurgerConstructorItem({
           text={
             bun ? `${bun.name} ${top ? "(верх)" : "(низ)"}` : "Выберите булочку"
           }
-          price={bun && bun.price}
-          thumbnail={bun && bun.image}
+          price={bun! && (bun?.price ?? 0)}
+          thumbnail={bun! && (bun?.image ?? '')}
           extraClass={classNames(
             isHoverBun && styles.hover,
             !bun && styles.empty
@@ -84,9 +82,9 @@ function BurgerConstructorItem({
             <ConstructorElement
               isLocked={false}
               text={data ? data.name : "Выберите ингредиенты"}
-              price={data! && data!.price}
-              thumbnail={data! && data!.image}
-              handleClose={() => deleteIngredient!(data!.key)}
+              price={data! && (data?.price ?? 0)}
+              thumbnail={data! && (data?.image ?? '')}
+              handleClose={() => deleteIngredient!(data?.key ?? 0)}
               extraClass={classNames(
                 !data && styles.empty,
                 isHoverIngr && styles.hover,

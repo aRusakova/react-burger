@@ -8,12 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import useForm from "../../../hooks/useForm";
 import { getEditedUser } from "../../../services/user/actions";
 import { FormEvent } from "react";
-import { TUser } from "../../../utils/types";
+import { IUser } from "../../../utils/types";
 
 function ProfileEditing(): JSX.Element {
   const dispatch = useDispatch();
   //@ts-ignore
-  const user: TUser = useSelector((store) => store.user.user);
+  const user: IUser = useSelector((store) => store.user.user);
 
   const { formValues, handleInputChange, resetForm, hidePassword } = useForm({
     email: user.email,

@@ -1,11 +1,11 @@
 import { useState, ChangeEvent } from "react";
 
-export type TUseFormProps = {
+interface IUseFormProps {
   [name: string]: string;
 }
 
-function useForm(initial: TUseFormProps) {
-  const [formValues, setFormValues] = useState<TUseFormProps>(initial);
+function useForm(initial: IUseFormProps) {
+  const [formValues, setFormValues] = useState<IUseFormProps>(initial);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
   

@@ -10,12 +10,12 @@ Modal.propTypes = {
   closeModal: PropTypes.func.isRequired,
 };
 
-export type TModalProps = {
+interface IModalProps {
   children: ReactNode;
   closeModal: () => void;
 }
 
-export default function Modal({ children, closeModal }: TModalProps): JSX.Element {
+export default function Modal({ children, closeModal }: IModalProps): JSX.Element {
 
   const modalOverlayRef = useRef<HTMLDivElement | null>(null);
 

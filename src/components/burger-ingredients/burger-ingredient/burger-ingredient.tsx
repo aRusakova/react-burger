@@ -8,20 +8,24 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from "react-router-dom";
-import { TIngredient } from "../../../utils/types";
+import { IIngredient } from "../../../utils/types";
 
-type TCounter = {
+interface ICounter {
   [name: string]: number;
 };
 
-function BurgerIngredient({ data }: {data: TIngredient}): JSX.Element {
+interface IComponentProps {
+  data: IIngredient
+}
+
+function BurgerIngredient({ data }: IComponentProps): JSX.Element {
 
   const BUNS = "bun";
 
   const location = useLocation();
 
   //@ts-ignore
-  const { ingredients, bun }: {ingredients: Ingredient[], bun: Ingredient} = useSelector((store) => store.construct.consruct);
+  const { ingredients, bun }: {ingredients: IIngredient[], bun: IIngredient} = useSelector((store) => store.construct.consruct);
 
   const bunCounter = useMemo(() => {
     if (bun) {
@@ -30,7 +34,7 @@ function BurgerIngredient({ data }: {data: TIngredient}): JSX.Element {
   }, [bun, data._id]);
 
   const ingredientCounter = useMemo(() => {
-    let counter: TCounter = {};
+    let counter: ICounter = {};
     ingredients.map((ingredient) => {
       if (!counter[ingredient._id]) {
         counter[ingredient._id] = 1;

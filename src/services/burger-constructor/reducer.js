@@ -30,7 +30,7 @@ export const constructSlice = createSlice({
       },
     },
     deleteAllConstructIngredients: {
-      reducer: (state) => {
+      reducer: (state = constructReducer.state) => {
         state.consruct.ingredients = [];
         state.consruct.bun = null;
       },

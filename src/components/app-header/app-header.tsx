@@ -8,9 +8,12 @@ import {
 import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { IUser } from "../../utils/types";
 
-function AppHeader() {
-  const user = useSelector((store) => store.user.user);
+function AppHeader(): JSX.Element {
+
+  //@ts-ignore
+  const user: IUser = useSelector((store) => store.user.user);
 
   return (
     <header className={classNames(styles.header, "p-4")}>

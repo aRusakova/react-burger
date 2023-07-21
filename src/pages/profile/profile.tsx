@@ -5,11 +5,12 @@ import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { logoutUser } from "../../services/user/actions";
 
-function Profile() {
+function Profile(): JSX.Element {
 
   const dispatch = useDispatch();
 
   const handleClick = () => {
+    //@ts-ignore
     dispatch(logoutUser());
   };
 

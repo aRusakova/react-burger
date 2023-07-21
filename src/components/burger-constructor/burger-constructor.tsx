@@ -19,16 +19,32 @@ import Error from "../error/error";
 import { useDrop } from "react-dnd";
 import BurgerConstructorItem from "./burger-constructor-item/burger-constructor-item";
 import { useNavigate } from "react-router";
+import { IIngredient, IOrder, IUser } from "../../utils/types";
+import { AnyAction } from "redux";
 
-function BurgerConstructor() {
+interface IOrderRequest {
+  error: boolean,
+  loading: boolean,
+  order: IOrder,
+};
+export interface IIngredientWithKey extends IIngredient {
+  key: number
+};
+
+function BurgerConstructor(): JSX.Element {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const allIngredients = useSelector((store) => store.ingredients.ingredients);
-  const { bun } = useSelector((store) => store.construct.consruct);
-  const { ingredients } = useSelector((store) => store.construct.consruct);
-  const { error, loading, order } = useSelector((store) => store.order);
-  const user = useSelector((store) => store.user.user);
+  //@ts-ignore
+  const allIngredients: IIngredient[] = useSelector((store) => store.ingredients.ingredients);
+  //@ts-ignore
+  const { bun }: {bun: IIngredient} = useSelector((store) => store.construct.consruct);
+  //@ts-ignore
+  const { ingredients }: {ingredients: IIngredientWithKey[]} = useSelector((store) => store.construct.consruct);
+  //@ts-ignore
+  const { error, loading, order }: IOrderRequest = useSelector((store) => store.order);
+  //@ts-ignore
+  const user: IUser  = useSelector((store) => store.user.user);
 
   const totalCounter = useMemo(() => {
     let total;
@@ -41,35 +57,47 @@ function BurgerConstructor() {
     }
   }, [ingredients, bun]);
 
-  const deleteIngredient = (id) => {
+  const deleteIngredient = (id: number):void => {
     dispatch(deleteConstructIngredient(id));
   };
 
-  const createOrder = (ingredients, bun) => {
+  const createOrder = (ingredients: IIngredient[], bun: IIngredient): void => {
     const orderProductsId = [...ingredients, bun, bun].map((elem) => elem._id);
-    dispatch(addOrder(orderProductsId));
+    //@ts-ignore
+    dispatch(addOrder(orderProductsId) as unknown as AnyAction);
   };
 
   const closeOrderDetails = () => {
-    dispatch(deleteAllConstructIngredients());
+    dispatch(deleteAllConstructIngredients() as unknown as AnyAction);
     dispatch(clearOrder());
   };
 
+  interface IMonitor {
+    name: string,
+    type: string
+  }
+
+  interface IItem {
+    id: string
+  }
+
   const [{ isHoverBun, isHoverIngr }, dropTarget] = useDrop({
     accept: "ingredient",
-    drop: (item) => {
+    drop: (item: IItem) => {
       onDropHandler(item);
     },
+    
     collect: (monitor) => ({
-      isHoverBun: monitor.isOver() && monitor.getItem().type === "bun",
+      isHoverBun: monitor.isOver() && monitor.getItem<IMonitor>().type === "bun",
       isHoverIngr:
         monitor.isOver() &&
-        (monitor.getItem().type === "main" ||
-          monitor.getItem().type === "sauce"),
+        (monitor.getItem<IMonitor>().type === "main" ||
+          monitor.getItem<IMonitor>().type === "sauce"),
     }),
   });
 
-  const onDropHandler = (item) => {
+
+  const onDropHandler = (item: IItem) => {
     const draggedElement = allIngredients.find((elem) => elem._id === item.id);
     dispatch(addConstructIngredient(draggedElement));
   };
@@ -84,6 +112,7 @@ function BurgerConstructor() {
           <li className={styles.constructorItem}>
             <BurgerConstructorItem
               type="bun"
+              bun={bun}
               top={true}
               isHoverBun={isHoverBun}
             />
@@ -123,6 +152,7 @@ function BurgerConstructor() {
           <li className={styles.constructorItem}>
             <BurgerConstructorItem
               type="bun"
+              bun={bun}
               top={false}
               isHoverBun={isHoverBun}
             />

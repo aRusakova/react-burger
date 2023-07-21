@@ -6,7 +6,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 
-function NotFound404() {
+function NotFound404(): JSX.Element {
   return (
     <section className={styles.wrapper}>
       <div className={styles.top}>

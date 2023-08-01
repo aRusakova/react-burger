@@ -1,17 +1,17 @@
 import styles from "./ingridient-details.module.scss";
 import classNames from "classnames";
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../../services/store";
 import { useParams } from "react-router";
-import { IIngredient } from "../../../utils/types";
+
 
 function IngredientDetails(): JSX.Element {
-  //@ts-ignore
-  const { ingredients }: {ingredients: IIngredient[]} = useSelector((store) => store.ingredients);
+
+  const { ingredients } = useSelector((store) => store.ingredients);
   let { ingredientId } = useParams();
 
   const ingredient = useMemo(
-    () => ingredients.find((ingredient) => ingredient._id === ingredientId),
+    () => ingredients?.find((ingredient) => ingredient._id === ingredientId),
     [ingredientId, ingredients]
   );
 

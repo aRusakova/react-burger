@@ -1,0 +1,70 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.number {
+    text-align: center;
+}
+
+.status {
+    color: #0CC;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.priceBlock {
+    display: flex;
+    gap: 8px;
+}
+
+.ingredients {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.ingredient {
+    display: flex;
+    align-items: center;
+}
+
+.ingredientImgWrapper {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    border: 2px solid rgba(76, 76, 255, 1);
+    overflow: hidden;
+    background: #131316;
+    margin-right: 16px;
+  }
+  
+  .ingredientImg {
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    object-position: -24px 5px;
+  }
+
+  .name {
+    margin-right: auto;
+    max-width: 300px;
+  }
+
+  .price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }

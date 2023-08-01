@@ -5,10 +5,10 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrag, useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../../services/store";
 import { moveConstructIngredients } from "../../../services/burger-constructor/reducer";
 import { IIngredient } from "../../../utils/types";
-import { IIngredientWithKey } from "../burger-constructor";
+import { IIngredientWithKey } from "../../../utils/types"; 
 
 interface IBurgerConstructorProps {
   index?: number;
@@ -18,7 +18,7 @@ interface IBurgerConstructorProps {
   isHoverIngr?: boolean;
   isHoverBun?: boolean;
   top?: boolean;
-  bun?: IIngredient;
+  bun?: IIngredient | null;
 };
 
 function BurgerConstructorItem({

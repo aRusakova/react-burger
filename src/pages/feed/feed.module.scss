@@ -1,0 +1,28 @@
+.wrapper {
+    max-width: 1200px;
+    margin: 40px auto 0;
+}
+
+.pageContainer {
+    display: flex;
+    margin-top: 20px;
+}
+
+.ordersBox {
+    width: 700px;
+    max-height: 80vh;
+}
+
+.ordersInfo {
+    width: 40%;
+}
+
+.ordersStatus {
+    display: flex;
+}
+
+.doneNums {
+    p {
+        color: #0CC;
+    }
+}

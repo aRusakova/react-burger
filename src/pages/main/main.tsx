@@ -3,7 +3,7 @@ import BurgerIngredients from "../../components/burger-ingredients/burger-ingred
 import BurgerConstructor from "../../components/burger-constructor/burger-constructor";
 import Error from "../../components/error/error";
 import Loader from "../../components/loader/loader";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/store";
 import { IIngredient } from "../../utils/types";
 
 export interface IIngredientRequest {
@@ -13,19 +13,19 @@ export interface IIngredientRequest {
 };
 
 function Main(): JSX.Element {
-  //@ts-ignore
-  const { ingredients, loading, error }: IIngredientRequest = useSelector((store) => store.ingredients);
+
+  const { ingredients, loading, error } = useSelector((store) => store.ingredients);
 
   return (
     <div className={styles.wrapper}>
       {loading && <Loader />}
-      {!loading && !error && ingredients.length && (
+      {!loading && !error && ingredients?.length && (
         <main className={styles.main}>
           <BurgerIngredients />
           <BurgerConstructor />
         </main>
       )}
-      {!loading && error && <Error />}
+      {!loading && error instanceof Error && <Error />}
     </div>
   );
 }

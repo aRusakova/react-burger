@@ -1,9 +1,12 @@
 import styles from "./profile-orders.module.scss";
+import OrdersList from "../../../components/orders/orders-list/orders-list";
 
 function ProfileOrders(): JSX.Element {
   return (
     <section className={styles.wrapper}>
-      <p className="text text_type_main-medium">У вас пока нет заказов</p>
+      <div className={styles.ordersBox}>
+        <OrdersList />
+      </div>
     </section>
   );
 }

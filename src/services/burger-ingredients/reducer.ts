@@ -1,13 +1,23 @@
+import { IIngredient } from "../../utils/types";
 import { loadIngredients } from "./actions";
 import { createSlice } from "@reduxjs/toolkit";
 
+export type TIngredientsStore = {
+  ingredients?: Array<IIngredient> | null,
+  loading: boolean,
+  error: string | unknown | null,
+};
+
+const initialState: TIngredientsStore = {
+  ingredients: [],
+  loading: false,
+  error: null,
+};
+
 const ingredientsSlice = createSlice({
   name: "ingredients",
-  initialState: {
-    ingredients: [],
-    loading: false,
-    error: null,
-  },
+  initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loadIngredients.pending, (state) => {

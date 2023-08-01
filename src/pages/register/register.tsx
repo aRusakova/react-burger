@@ -7,7 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/store";
 import { registerUser } from "../../services/user/actions";
 import { FormEvent } from "react";
 
@@ -24,7 +24,6 @@ function Register(): JSX.Element {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //@ts-ignore
     dispatch(registerUser(formValues));
 
   };

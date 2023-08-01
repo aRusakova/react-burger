@@ -1,17 +1,15 @@
 import styles from "./order-details.module.scss";
 import classNames from "classnames";
 import Done from '../../../images/done.jpg';
-import { useSelector } from 'react-redux';
-import { IOrder } from "../../../utils/types";
-
+import { useSelector } from "../../../services/store";
 
 function OrderDetails(): JSX.Element {
-  //@ts-ignore
-  const { order }: IOrder = useSelector((store) => store.order);
+
+  const { order } = useSelector((store) => store.order);
 
   return (
     <section className={classNames(styles.wrapper, "mt-30 mb-30")}>
-      <p className={classNames("text text_type_digits-large", "mb-8")}>{order.order.number}</p>
+      <p className={classNames("text text_type_digits-large", "mb-8")}>{order?.order.number}</p>
       <p className={classNames("text text_type_main-large", "mb-15")}>идентификатор заказа</p>
       <img className="mb-15" src={Done} alt="" />
       <p className={classNames("text text_type_main-default", "mb-2")}>Ваш заказ начали готовить</p>

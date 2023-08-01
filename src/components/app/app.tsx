@@ -14,15 +14,16 @@ import Profile from "../../pages/profile/profile";
 import ProfileOrders from "../../pages/profile/profile-orders/profile-orders";
 import ProfileEditing from "../../pages/profile/profile-editing/profile-editing";
 import IngredientDetails from "../burger-ingredients/ingridient-details/ingridient-details";
+import Feed from "../../pages/feed/feed";
+import OrderDetails from "../orders/order-details/order-details";
 import Modal from "../modal/modal";
 import { loadIngredients } from "../../services/burger-ingredients/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/store";
 import { checkUserAuth } from "../../services/user/actions";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route";
-import { AnyAction } from "redux";
+
 
 function App(): JSX.Element {
-
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state && location.state.background;
@@ -34,24 +35,36 @@ function App(): JSX.Element {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadIngredients() as unknown as AnyAction);
-    dispatch(checkUserAuth() as unknown as AnyAction);
+    dispatch(loadIngredients());
+    dispatch(checkUserAuth());
   }, []);
-  
 
   return (
     <DndProvider backend={HTML5Backend}>
       <AppHeader />
       <Routes location={background || location}>
         <Route path="/" element={<Main />} />
+        <Route path="/feed" element={<Feed />} />
         <Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
-        <Route path="/register" element={<OnlyUnAuth component={<Register />} />} />
-        <Route path="/forgot-password" element={<OnlyUnAuth component={<ForgotPassword />} />} />
-        <Route path="/reset-password" element={<OnlyUnAuth component={<ResetPassword />} />} />
+        <Route
+          path="/register"
+          element={<OnlyUnAuth component={<Register />} />}
+        />
+        <Route
+          path="/forgot-password"
+          element={<OnlyUnAuth component={<ForgotPassword />} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<OnlyUnAuth component={<ResetPassword />} />}
+        />
 
         <Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
           <Route index element={<OnlyAuth component={<ProfileEditing />} />} />
-          <Route path="orders" element={<OnlyAuth component={<ProfileOrders />} />} />
+          <Route
+            path="orders"
+            element={<OnlyAuth component={<ProfileOrders />} />}
+          />
         </Route>
 
         <Route
@@ -59,22 +72,58 @@ function App(): JSX.Element {
           element={<IngredientDetails />}
         />
 
+        <Route path="/feed/:orderId" element={<OrderDetails />} />
+
+        <Route
+          path="/profile/orders/:orderId"
+          element={<OnlyAuth component={<OrderDetails />} />}
+        />
 
         <Route path="*" element={<NotFound404 />} />
       </Routes>
 
+      {background &&  (
+        <Routes>
+          <Route
+            path="/ingredients/:ingredientId"
+            element={
+              <Modal closeModal={handleModalClose}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+
       {background && (
-          <Routes>
-            <Route
-              path="/ingredients/:ingredientId"
-              element={
-                <Modal closeModal={handleModalClose}>
-                  <IngredientDetails />
-                </Modal>
-              }
-            />
-          </Routes>
-        )}
+        <Routes>
+          <Route
+            path="/feed/:orderId"
+            element={
+              <Modal closeModal={handleModalClose}>
+                <OrderDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+
+      {background &&  (
+        <Routes>
+          <Route
+            path="/profile/orders/:orderId"
+            element={
+              <OnlyAuth
+                component={
+                  <Modal closeModal={handleModalClose}>
+                    <OrderDetails />
+                  </Modal>
+                }
+              />
+            }
+          />
+        </Routes>
+      )}
     </DndProvider>
   );
 }

@@ -6,14 +6,12 @@ import {
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/store";
 import { NavLink } from "react-router-dom";
-import { IUser } from "../../utils/types";
 
 function AppHeader(): JSX.Element {
 
-  //@ts-ignore
-  const user: IUser = useSelector((store) => store.user.user);
+  const user = useSelector((store) => store.user.user);
 
   return (
     <header className={classNames(styles.header, "p-4")}>
@@ -43,7 +41,7 @@ function AppHeader(): JSX.Element {
           </div>
           <div className="pl-5 pr-5 pb-4 pt-4">
             <NavLink
-              to="/orders"
+              to="/feed"
               className={({ isActive }) =>
                 isActive ? styles.menuItemActive : styles.menuItem
               }

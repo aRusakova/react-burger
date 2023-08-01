@@ -4,13 +4,13 @@ import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../../services/store";
 import { useMemo } from "react";
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from "react-router-dom";
 import { IIngredient } from "../../../utils/types";
 
-interface ICounter {
+export interface ICounter {
   [name: string]: number;
 };
 
@@ -24,8 +24,7 @@ function BurgerIngredient({ data }: IComponentProps): JSX.Element {
 
   const location = useLocation();
 
-  //@ts-ignore
-  const { ingredients, bun }: {ingredients: IIngredient[], bun: IIngredient} = useSelector((store) => store.construct.consruct);
+  const { ingredients, bun } = useSelector((store) => store.construct.consruct);
 
   const bunCounter = useMemo(() => {
     if (bun) {

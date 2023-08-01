@@ -3,8 +3,7 @@ import styles from "./burger-ingredients.module.scss";
 import classNames from "classnames";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsList from "./burger-ingredients-list/burger-ingredients-list";
-import { useSelector } from "react-redux";
-import { IIngredient } from "../../utils/types";
+import { useSelector } from "../../services/store";
 
 export type TCategoty = "bun" | "sauce" | "main"; 
 
@@ -16,8 +15,7 @@ function BurgerIngredients(): JSX.Element {
 
   const [category, setCategory] = useState<TCategoty>(BUNS);
   
-  //@ts-ignore
-  const ingredients: IIngredient[] = useSelector((store) => store.ingredients.ingredients);
+  const ingredients = useSelector((store) => store.ingredients.ingredients);
 
   const tabsRef = useRef<HTMLElement | null>(null);
   const bunsRef = useRef<HTMLDivElement | null >(null);

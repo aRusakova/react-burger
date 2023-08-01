@@ -1,14 +1,32 @@
-import { loginUser, logoutUser, registerUser, getUserWithToken, getEditedUser, checkUserAuth } from "./actions";
+import { IUser } from "../../utils/types";
+import {
+  loginUser,
+  logoutUser,
+  registerUser,
+  getUserWithToken,
+  getEditedUser,
+  checkUserAuth,
+} from "./actions";
 import { createSlice } from "@reduxjs/toolkit";
 
-const orderSlice = createSlice({
-    name: "user",
-    initialState: {
-      user: null,
-      loading: false,
-      error: null,
-      isAuthChecked: false,
-    },
+export type TUsertStore = {
+  user?: IUser | null;
+  loading: boolean;
+  error: string | null | unknown;
+  isAuthChecked: boolean;
+};
+
+const initialState: TUsertStore = {
+  user: null,
+  loading: false,
+  error: null,
+  isAuthChecked: false,
+};
+
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -27,7 +45,6 @@ const orderSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.isAuthChecked = false;
-
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -41,7 +58,6 @@ const orderSlice = createSlice({
 
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
-
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
@@ -54,7 +70,6 @@ const orderSlice = createSlice({
 
       .addCase(getUserWithToken.pending, (state) => {
         state.loading = true;
-
       })
       .addCase(getUserWithToken.rejected, (state, action) => {
         state.loading = false;
@@ -67,7 +82,6 @@ const orderSlice = createSlice({
 
       .addCase(getEditedUser.pending, (state) => {
         state.loading = true;
-
       })
       .addCase(getEditedUser.rejected, (state, action) => {
         state.loading = false;
@@ -80,7 +94,6 @@ const orderSlice = createSlice({
 
       .addCase(checkUserAuth.pending, (state) => {
         state.loading = true;
-
       })
       .addCase(checkUserAuth.rejected, (state, action) => {
         state.loading = false;
@@ -91,8 +104,8 @@ const orderSlice = createSlice({
       .addCase(checkUserAuth.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthChecked = true;
-      })
+      });
   },
 });
 
-export const userReducer = orderSlice.reducer;
+export const userReducer = userSlice.reducer;

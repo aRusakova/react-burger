@@ -1,5 +1,6 @@
 import { Exception } from "sass";
-import { IIngredient, IUser } from "./types";
+import { IIngredient, IOrder, IOrderInfo, IUser } from "./types";
+import { IUseFormProps } from "../hooks/useForm";
 
 const baseUrl = "https://norma.nomoreparties.space/api";
 
@@ -12,9 +13,16 @@ interface IIngredientsResponse {
   data: IIngredient[],
 }
 
+interface IOrderDetailsResponse {
+  success: boolean,
+  orders: IOrderInfo[],
+}
+
 type IUserResponse = {
   success: true,
   user: IUser,
+  accessToken: string,
+  refreshToken: string,
 }
 
 type IUserLogout = {
@@ -55,13 +63,17 @@ export const getIngredients = async(): Promise<IIngredient[]> => {
   return await request<IIngredientsResponse>("/ingredients").then((response) => response.data);
 };
 
-export const addOrderToApi = (ingredients:IIngredient[]):Promise<IUser> => {
+export const addOrderToApi = (ingredients: Array<string>):Promise<IOrder> => {
   const orderIngredients = {
     ingredients,
   }
-  const requestOptions = createReguestOptions<{ingredients: IIngredient[]}>(POST, orderIngredients, true);
-  return request<IUser>("/orders", requestOptions).then((response) => response);
+  const requestOptions = createReguestOptions<{ingredients: Array<string>}>(POST, orderIngredients, true);
+  return request<IOrder>("/orders", requestOptions).then((response) => response);
 };
+
+export const getOrderFromApi = (orderNumber: string): Promise<IOrderDetailsResponse> => {
+  return request<IOrderDetailsResponse>(`/orders/${orderNumber}`).then((response) => response);
+}
 
 export const refreshToken = <T>():Promise<T> => {
   const refreshToken = {token: localStorage.getItem("refreshToken")};
@@ -88,12 +100,12 @@ export const fetchWithRefresh = async <T>(url:string, options:RequestInit): Prom
   }
 };
 
-export const register = async(user:IUser):Promise<IUserResponse> => {
+export const register = async(user:IUseFormProps):Promise<IUserResponse> => {
   const requestOptions = createReguestOptions(POST, user);
   return await request<IUserResponse>("/auth/register", requestOptions).then((response) => response);
 }
 
-export const login = async (user:IUser): Promise<IUserResponse> => {
+export const login = async (user:IUseFormProps): Promise<IUserResponse> => {
   const requestOptions = createReguestOptions(POST, user, true);
   return await fetchWithRefresh<IUserResponse>("/auth/login", requestOptions).then((response) => response);
 }

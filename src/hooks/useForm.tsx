@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react";
 
-interface IUseFormProps {
+export interface IUseFormProps {
   [name: string]: string;
 }
 

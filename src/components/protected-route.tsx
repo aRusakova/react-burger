@@ -1,7 +1,6 @@
-import { useSelector } from "react-redux";
+import { useSelector } from "../services/store";
 import { Navigate, useLocation } from "react-router-dom";
 import Loader from "./loader/loader";
-import { IUser } from "../utils/types";
 
 type TProtectedRouteProps = {
   onlyAuth: boolean,
@@ -9,10 +8,9 @@ type TProtectedRouteProps = {
 }
 
 function Protected ({ onlyAuth, component }: TProtectedRouteProps): JSX.Element {
-  //@ts-ignore
-  const isAuthChecked:boolean = useSelector((store) => store.user.isAuthChecked);
-  //@ts-ignore
-  const user: IUser = useSelector((store) => store.user.user);
+
+  const isAuthChecked = useSelector((store) => store.user.isAuthChecked);
+  const user = useSelector((store) => store.user.user);
   const location = useLocation();
 
   if (!isAuthChecked) {

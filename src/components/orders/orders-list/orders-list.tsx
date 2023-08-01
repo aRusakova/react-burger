@@ -11,9 +11,9 @@ import { connect, disconnect } from "../../../services/burger-orders-profile/act
 import Loader from "../../loader/loader";
 import { IOrdersFeedStore } from "../../../services/burger-orders-feeds/reducer";
 
-function OrdersList({ ordersFeed }: {ordersFeed?: IOrdersFeedStore}): JSX.Element {
+const ORDERS_PROFILE_SERVER_URL = "wss://norma.nomoreparties.space/orders";
 
-  const ORDERS_PROFILE_SERVER_URL = "wss://norma.nomoreparties.space/orders";
+function OrdersList({ ordersFeed }: {ordersFeed?: IOrdersFeedStore}): JSX.Element {
 
   const dispatch = useDispatch();
 
@@ -62,7 +62,7 @@ function OrdersList({ ordersFeed }: {ordersFeed?: IOrdersFeedStore}): JSX.Elemen
 
   const calculateTotalPrice = (ingrs:Array<string>) => {
     const ingredientsArray = ingrs.map((elem) => ingredients?.find((ingredient) => ingredient._id === elem));
-    let total;
+    let total = 0;
     if (ingredientsArray) {
       total = ingredientsArray.reduce((acc, elem) => {
         if (elem?.price) {
@@ -71,8 +71,8 @@ function OrdersList({ ordersFeed }: {ordersFeed?: IOrdersFeedStore}): JSX.Elemen
           return acc + 0
         }
       },0);
-      return total;
     }
+    return total;
   };
 
   return (

@@ -20,7 +20,7 @@ function OrderDetails(): JSX.Element {
 
   const { ingredients } = useSelector((store) => store.ingredients);
 
-  let { orderId } = useParams();
+  const { orderId } = useParams();
 
   useEffect(() => {
     if (orderId) {
@@ -126,10 +126,10 @@ function OrderDetails(): JSX.Element {
         ))}
       </div>
       <div className={styles.footer}>
-        {orderDetails && <FormattedDate
+        {orderDetails ? <FormattedDate
           date={new Date(orderDetails?.createdAt)}
           className="text text_type_main-default text_color_inactive"
-        />}
+        /> : ""}
         
         <div className={styles.priceBlock}>
           <p

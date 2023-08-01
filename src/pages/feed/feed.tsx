@@ -9,8 +9,9 @@ import {
   disconnect,
 } from "../../services/burger-orders-feeds/actions";
 
+const ORDERS_FEED_SERVER_URL = "wss://norma.nomoreparties.space/orders/all";
+
 function Feed(): JSX.Element {
-  const ORDERS_FEED_SERVER_URL = "wss://norma.nomoreparties.space/orders/all";
 
   const dispatch = useDispatch();
 

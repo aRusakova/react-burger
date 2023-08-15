@@ -5,13 +5,13 @@ import { createSlice } from "@reduxjs/toolkit";
 export type TIngredientsStore = {
   ingredients?: Array<IIngredient> | null,
   loading: boolean,
-  error: string | unknown | null,
+  error: boolean,
 };
 
-const initialState: TIngredientsStore = {
+export const initialState: TIngredientsStore = {
   ingredients: [],
   loading: false,
-  error: null,
+  error: false,
 };
 
 const ingredientsSlice = createSlice({
@@ -22,11 +22,11 @@ const ingredientsSlice = createSlice({
     builder
       .addCase(loadIngredients.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = false;
       })
-      .addCase(loadIngredients.rejected, (state, action) => {
+      .addCase(loadIngredients.rejected, (state) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = true;
       })
       .addCase(loadIngredients.fulfilled, (state, action) => {
         state.loading = false;

@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 import { IIngredient, IIngredientWithKey } from "../../utils/types";
 
 export type TConstructtStore = {
   consruct: {
-    bun?: IIngredient | null;
+    bun?: IIngredientWithKey | null;
     ingredients: Array<IIngredientWithKey>;
   };
 };
 
-const initialState: TConstructtStore = {
+export const initialState: TConstructtStore = {
   consruct: {
     bun: null,
     ingredients: [],
@@ -21,12 +21,13 @@ export const constructSlice = createSlice({
   initialState,
   reducers: {
     addConstructIngredient: (state, action) => {
-      if (action.payload.type === "bun") {
-        state.consruct.bun = action.payload;
+      const { draggedElement, key } = action.payload;
+      if (draggedElement.type === "bun") {
+        state.consruct.bun = draggedElement;
       } else {
         state.consruct.ingredients = [
           ...state?.consruct?.ingredients,
-          { ...action.payload, key: uuidv4() },
+          { ...draggedElement, key },
         ];
       }
     },

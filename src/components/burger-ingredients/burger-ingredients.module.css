@@ -1,0 +1,42 @@
+@media screen and (min-width: 1200px) {
+  .wrapper {
+    max-width: 600px;
+  }
+}
+
+.toggleBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+@media screen and (min-width: 768px) {
+  .toggleBlock {
+    flex-direction: row;
+  }
+}
+
+.title {
+  text-align: center;
+}
+@media screen and (min-width: 1200px) {
+  .title {
+    text-align: left;
+  }
+}
+
+.block {
+  overflow-y: scroll;
+  height: auto;
+  max-height: 500px;
+}
+@media screen and (min-width: 768px) {
+  .block {
+    max-height: 600px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .block {
+    max-height: 65vh;
+  }
+}/*# sourceMappingURL=burger-ingredients.module.css.map */

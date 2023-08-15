@@ -25,7 +25,7 @@ function Main(): JSX.Element {
           <BurgerConstructor />
         </main>
       )}
-      {!loading && error instanceof Error && <Error />}
+      {!loading && error  && <Error />}
     </div>
   );
 }

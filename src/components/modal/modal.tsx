@@ -40,8 +40,8 @@ export default function Modal({ children, closeModal }: IModalProps): JSX.Elemen
 
   return createPortal(
     <section className={styles.wrapper} onClick={clickOnLayout}>
-      <div className={styles.modal}>
-        <div className={styles.buttonContainer}>
+      <div className={styles.modal} data-testid="modal">
+        <div className={styles.buttonContainer} data-testid="modalCloseBtn">
           <CloseIcon type="primary" onClick={closeModal} />
         </div>
         {children}

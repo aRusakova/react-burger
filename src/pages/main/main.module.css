@@ -1,0 +1,21 @@
+.wrapper {
+  background: #131316;
+  overflow: hidden;
+}
+@media screen and (min-width: 1200px) {
+  .wrapper {
+    max-height: 100vh;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (min-width: 1200px) {
+  .main {
+    flex-direction: row;
+    margin: 0 auto;
+    max-width: 1280px;
+  }
+}/*# sourceMappingURL=main.module.css.map */

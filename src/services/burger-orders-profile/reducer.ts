@@ -8,7 +8,7 @@ export interface IOrdersProfileStore {
     ordersProfile?: IOrdersFeed | null,
 }
 
-const initialState: IOrdersProfileStore = {
+export const initialState: IOrdersProfileStore = {
     status: WebsocketStatus.OFFLINE,
     connectionError: '',
     ordersProfile: null,

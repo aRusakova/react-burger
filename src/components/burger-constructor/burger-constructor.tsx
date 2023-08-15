@@ -19,7 +19,8 @@ import { useDrop } from "react-dnd";
 import BurgerConstructorItem from "./burger-constructor-item/burger-constructor-item";
 import { useNavigate } from "react-router";
 import { IIngredient } from "../../utils/types";
-import { useDispatch, useSelector } from "../../services/store"; 
+import { useDispatch, useSelector } from "../../services/store";
+import { v4 as uuidv4 } from "uuid";
 
 
 function BurgerConstructor(): JSX.Element {
@@ -58,7 +59,6 @@ function BurgerConstructor(): JSX.Element {
   };
 
   const closeOrderDetails = () => {
-    //@ts-ignore
     dispatch(deleteAllConstructIngredients());
     dispatch(clearOrder());
   };
@@ -89,8 +89,9 @@ function BurgerConstructor(): JSX.Element {
 
 
   const onDropHandler = (item: IItem) => {
-    const draggedElement = allIngredients?.find((elem) => elem._id === item.id);
-    dispatch(addConstructIngredient(draggedElement));
+    let draggedElement = allIngredients?.find((elem) => elem._id === item.id);
+    const key = uuidv4();
+    dispatch(addConstructIngredient({draggedElement, key}));
   };
 
   return (
@@ -99,6 +100,7 @@ function BurgerConstructor(): JSX.Element {
         <ul
           className={classNames(styles.constructorList, "mb-10")}
           ref={dropTarget}
+          data-testid="constructor"
         >
           <li className={styles.constructorItem}>
             <BurgerConstructorItem
@@ -162,7 +164,8 @@ function BurgerConstructor(): JSX.Element {
             <CurrencyIcon type="primary" />
           </div>
           {ingredients.length && bun ? (
-            <Button
+            <div data-testid="createOrderBtn">
+              <Button
               htmlType="button"
               type="primary"
               size="large"
@@ -170,6 +173,8 @@ function BurgerConstructor(): JSX.Element {
             >
               Оформить заказ
             </Button>
+            </div>
+            
           ) : (
             <div></div>
           )}

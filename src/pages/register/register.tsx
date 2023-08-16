@@ -38,7 +38,7 @@ function Register(): JSX.Element {
           type={"text"}
           placeholder={"Имя"}
           onChange={handleInputChange}
-          value={formValues.name}
+          value={formValues.name ?? ''}
           name={"name"}
           size={"default"}
           extraClass="mb-6"
@@ -47,14 +47,14 @@ function Register(): JSX.Element {
           type={"text"}
           placeholder={"E-mail"}
           onChange={handleInputChange}
-          value={formValues.email}
+          value={formValues.email ?? ''}
           name={"email"}
           size={"default"}
           extraClass="mb-6"
         />
         <PasswordInput
           onChange={handleInputChange}
-          value={formValues.password}
+          value={formValues.password ?? ''}
           name={"password"}
           extraClass="mb-6"
         />

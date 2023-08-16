@@ -2,7 +2,7 @@
 
 describe("products management works correctly", function () {
   before(function () {
-    cy.visit("http://localhost:3000/");
+    cy.visit('');
   });
 
   beforeEach(() => {

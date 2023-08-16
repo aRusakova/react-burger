@@ -43,7 +43,7 @@ function ResetPassword(): JSX.Element {
       <form onSubmit={handleSubmit} className={styles.form}>
         <PasswordInput
           onChange={handleInputChange}
-          value={formValues.password}
+          value={formValues.password ?? ''}
           placeholder={"Введите новый пароль"}
           name={"password"}
           extraClass="mb-6"
@@ -52,7 +52,7 @@ function ResetPassword(): JSX.Element {
           type={"text"}
           placeholder={"Введите код из письма"}
           onChange={handleInputChange}
-          value={formValues.token}
+          value={formValues.token ?? ''}
           name={"token"}
           size={"default"}
           extraClass="mb-6"

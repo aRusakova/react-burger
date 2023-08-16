@@ -1,7 +1,10 @@
 import { useState, ChangeEvent } from "react";
 
 export interface IUseFormProps {
-  [name: string]: string;
+  email?: string;
+  name?: string;
+  password?: string;
+  token?: string;
 }
 
 function useForm(initial: IUseFormProps) {

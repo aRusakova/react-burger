@@ -6,7 +6,6 @@ import {
   editUser,
 } from "../../utils/burger-api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IUser } from "../../utils/types";
 import { IUseFormProps } from "../../hooks/useForm";
 
 export const loginUser = createAsyncThunk(
@@ -72,7 +71,7 @@ export const getUserWithToken = createAsyncThunk(
 
 export const getEditedUser = createAsyncThunk(
   "user/getEditedUser",
-  async (payload: IUser, thunkAPI) => {
+  async (payload: IUseFormProps, thunkAPI) => {
     try {
       const res = await editUser(payload);
       return res.user;

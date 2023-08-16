@@ -4,26 +4,23 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../../services/store";
 import useForm from "../../../hooks/useForm";
 import { getEditedUser } from "../../../services/user/actions";
 import { FormEvent } from "react";
-import { IUser } from "../../../utils/types";
 
 function ProfileEditing(): JSX.Element {
   const dispatch = useDispatch();
-  //@ts-ignore
-  const user: IUser = useSelector((store) => store.user.user);
+  const user = useSelector((store) => store.user.user);
 
   const { formValues, handleInputChange, resetForm, hidePassword } = useForm({
-    email: user.email,
+    email: user?.email,
     password: "",
-    name: user.name,
+    name: user?.name,
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //@ts-ignore
     dispatch(getEditedUser(formValues));
     hidePassword();
   };
@@ -40,7 +37,7 @@ function ProfileEditing(): JSX.Element {
           placeholder={"Имя"}
           onChange={handleInputChange}
           icon={"EditIcon"}
-          value={formValues.name}
+          value={formValues.name ?? ''}
           name={"name"}
           extraClass="ml-1"
         />
@@ -49,7 +46,7 @@ function ProfileEditing(): JSX.Element {
           placeholder={"Логин"}
           onChange={handleInputChange}
           icon={"EditIcon"}
-          value={formValues.email}
+          value={formValues.email ?? ''}
           name={"email"}
           size={"default"}
           extraClass="ml-1"
@@ -59,9 +56,8 @@ function ProfileEditing(): JSX.Element {
           placeholder={"Пароль"}
           onChange={handleInputChange}
           icon={"EditIcon"}
-          value={formValues.password}
+          value={formValues.password ?? ''}
           name={"password"}
-          // onIconClick={onIconClick}
           size={"default"}
           extraClass="ml-1"
         />
@@ -70,9 +66,9 @@ function ProfileEditing(): JSX.Element {
         <p className={classNames(styles.text, "text text_type_main-default")}>
           В этом разделе вы можете изменить свои персональные данные
         </p>
-        {(user.name !== formValues.name ||
-          user.email !== formValues.email ||
-          formValues.password.length !== 0) && (
+        {(user?.name !== formValues.name ||
+          user?.email !== formValues.email ||
+          formValues.password?.length !== 0) && (
           <div className={styles.buttons}>
             <Button htmlType="reset" type="secondary" size="medium">
               Отмена

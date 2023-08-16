@@ -39,7 +39,7 @@ function ForfotPassword(): JSX.Element {
           type={"text"}
           placeholder="Укажите e-mail"
           onChange={handleInputChange}
-          value={formValues.email}
+          value={formValues.email ?? ''}
           name={"email"}
           size={"default"}
           extraClass="mb-6"

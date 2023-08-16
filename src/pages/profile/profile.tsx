@@ -1,6 +1,6 @@
 import styles from "./profile.module.scss";
 import classNames from "classnames";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/store";
 import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { logoutUser } from "../../services/user/actions";
@@ -10,7 +10,6 @@ function Profile(): JSX.Element {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    //@ts-ignore
     dispatch(logoutUser());
   };
 

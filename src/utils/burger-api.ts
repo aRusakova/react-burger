@@ -122,7 +122,7 @@ export const getUser = async():Promise<IUserResponse> => {
   return fetchWithRefresh<IUserResponse>("/auth/user", requestOptions).then((response) => response);
 }
 
-export const editUser = (user:IUser): Promise<IUserResponse> => {
+export const editUser = (user:IUseFormProps): Promise<IUserResponse> => {
   const requestOptions = createReguestOptions(PATCH, user, true);
   return fetchWithRefresh<IUserResponse>("/auth/user", requestOptions).then((response) => response);
 }

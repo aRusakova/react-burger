@@ -57,6 +57,7 @@ function BurgerIngredient({ data }: IComponentProps): JSX.Element {
         ref={dragRef}
         to={`/ingredients/${data._id}`}
         state={{background: location }}
+        data-testid={data.type === BUNS ? 'bun' : 'ingr'}
         >
         <img src={data.image} alt="" className="mb-1" />
         <div className={classNames(styles.priceBlock, "mb-1")}>
@@ -66,7 +67,8 @@ function BurgerIngredient({ data }: IComponentProps): JSX.Element {
         <p className={classNames(styles.name, "text text_type_main-default")}>
           {data.name}
         </p>
-        {data.type === BUNS
+        <div data-testid="counter">
+          {data.type === BUNS
           ? bunCounter && (
               <Counter count={bunCounter} size="default" extraClass="m-1" />
             )
@@ -77,6 +79,8 @@ function BurgerIngredient({ data }: IComponentProps): JSX.Element {
                 extraClass="m-1"
               />
             )}
+        </div>
+        
       </Link>
   );
 }

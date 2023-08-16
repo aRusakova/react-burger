@@ -5,14 +5,14 @@ import { IOrderInfo } from "../../utils/types";
 export type TOrderDetailsStore = {
   loading: boolean,
   orderDetails?: IOrderInfo | null,
-  error: string | null,
+  error: boolean,
 };
 
 
-const initialState: TOrderDetailsStore = {
+export const initialState: TOrderDetailsStore = {
   loading: false,
   orderDetails: null,
-  error: null,
+  error: false,
 };
 
 const orderDetailsSlice = createSlice({
@@ -22,14 +22,12 @@ const orderDetailsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getOrder.pending, (state) => {
       state.loading = true;
-      state.error = null;
+      state.error = false;
     });
     builder.addCase(getOrder.rejected, (state, action) => {
       state.loading = false;
       state.orderDetails = null;
-      if (action.payload instanceof Error) {
-        state.error = action.payload.message;
-      }
+      state.error = true;
     });
     builder.addCase(getOrder.fulfilled, (state, action) => {
       state.loading = false;

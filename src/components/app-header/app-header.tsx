@@ -7,7 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames";
 import { useSelector } from "../../services/store";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function AppHeader(): JSX.Element {
 
@@ -15,9 +15,9 @@ function AppHeader(): JSX.Element {
 
   return (
     <header className={classNames(styles.header, "p-4")}>
-      <div className={styles.logoWrapper}>
+      <Link to="/" className={styles.logoWrapper}>
         <Logo />
-      </div>
+      </Link>
       <nav className={styles.menu}>
         <div className={styles.leftCol}>
           <div className="pl-5 pr-5 pb-4 pt-4">

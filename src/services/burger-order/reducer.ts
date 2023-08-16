@@ -5,13 +5,13 @@ import { IOrder } from "../../utils/types";
 export type TOrderStore = {
   order?: IOrder | null;
   loading: boolean;
-  error: string | null;
+  error: boolean;
 };
 
-const initialState: TOrderStore = {
+export const initialState: TOrderStore = {
   order: null,
   loading: false,
-  error: null,
+  error: false,
 };
 
 const orderSlice = createSlice({
@@ -21,14 +21,12 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(addOrder.pending, (state) => {
       state.loading = true;
-      state.error = null;
+      state.error = false;
     });
-    builder.addCase(addOrder.rejected, (state, action) => {
+    builder.addCase(addOrder.rejected, (state) => {
       state.loading = false;
       state.order = null;
-      if (action.payload instanceof Error) {
-        state.error = action.payload.message;
-      }
+      state.error = true;
     });
     builder.addCase(addOrder.fulfilled, (state, action) => {
       state.loading = false;
@@ -36,7 +34,7 @@ const orderSlice = createSlice({
     });
     builder.addCase(clearOrder, (state) => {
       state.loading = false;
-      state.error = null;
+      state.error = false;
       state.order = null;
     });
   },
